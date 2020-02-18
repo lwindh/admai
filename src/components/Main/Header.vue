@@ -4,12 +4,9 @@
             <a href="/">
                 <img alt="大麦网" src="../../assets/Main/MainLeft.png" class="i-log">
             </a>
-            <div class="location-header">
+            <div class="location-header" @mouseenter="enter('city-header-wrap')" @mouseleave="leave('city-header-wrap')">
                 <img class="i-icon-location" src="../../assets/Main/position.png" alt="定位">
-                <el-tooltip placement="bottom" effect="light">
-                    <span class="city-location">全国</span>
-                    <div slot="content"></div>
-                </el-tooltip>
+                <span class="city-location">全国</span>
                 <img class="i-arrow-location" src="../../assets/Main/point.png" alt="箭头">
                 <div class="city-header-wrap">
                     <div class="city-header">
@@ -134,15 +131,15 @@
                                 <span class="name-city" data-spm="dselectcity&amp;clicktitle=武威">武威</span>
                                 <span class="name-city" data-spm="dselectcity&amp;clicktitle=西宁">西宁</span>
                                 <span class="name-city" data-spm="dselectcity&amp;clicktitle=伊春">伊春</span>
-                                <span class="name-city" data-spm="dselectcity&amp;clicktitle=岳阳">岳阳</span>
-                                <span class="name-city" data-spm="dselectcity&amp;clicktitle=湛江">湛江</span>
-                                <span class="name-city" data-spm="dselectcity&amp;clicktitle=张家口">张家口</span>
-                                <span class="name-city" data-spm="dselectcity&amp;clicktitle=肇庆">肇庆</span>
-                                <span class="name-city" data-spm="dselectcity&amp;clicktitle=中山">中山</span>
-                                <span class="name-city" data-spm="dselectcity&amp;clicktitle=驻马店">驻马店</span>
-                                <span class="name-city" data-spm="dselectcity&amp;clicktitle=淄博">淄博</span>
-                                <span class="name-city" data-spm="dselectcity&amp;clicktitle=遵义">遵义</span>
-                                <span class="name-city" data-spm="dselectcity&amp;clicktitle=国际及港澳台">国际及港澳台</span>
+                                <span class="name-city">岳阳</span>
+                                <span class="name-city">湛江</span>
+                                <span class="name-city">张家口</span>
+                                <span class="name-city">肇庆</span>
+                                <span class="name-city">中山</span>
+                                <span class="name-city">驻马店</span>
+                                <span class="name-city">淄博</span>
+                                <span class="name-city">遵义</span>
+                                <span class="name-city">国际及港澳台</span>
                             </div>
                         </div>
                     </div>
@@ -153,8 +150,8 @@
                 <a href="#" class="type-recommend">分类</a>
             </div>
             <div class="right-header">
-                <div class="box-header user-header">
-                    <a href="javascript:void(0)" class="J_userinfo_img">
+                <div class="box-header user-header" @mouseenter="enter('list-wrap')" @mouseleave="leave('list-wrap')">
+                    <a href="javascript:void(0)">
                         <img class="i-box-header i-user" src="../../assets/Main/user.png">
                     </a>
                     <div class="login-user show">
@@ -171,7 +168,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="box-header download-header">
+                <div class="box-header download-header" @mouseenter="enter('ewm-download')" @mouseleave="leave('ewm-download')">
                     <img class="i-box-header i-download" src="../../assets/Main/down.png" alt="下载">
                     <span class="span-box-header">下载</span>
                     <div class="ewm-download">
@@ -201,6 +198,14 @@
 <script>
     import '../../style/mainHeader.css'
     export default {
-        name: "Header"
+        name: "Header",
+        methods:{
+            enter(item){
+                document.getElementsByClassName(item)[0].style.display = "block";
+            },
+            leave(item){
+                document.getElementsByClassName(item)[0].style.display = "none";
+            }
+        }
     }
 </script>

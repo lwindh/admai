@@ -7,8 +7,8 @@
                     <el-row type="flex" class="row-bg" justify="center">
                         <el-col :span="8"><div class="grid-content bg-purple">
                             <el-form status-icon label-width="100px" :model="form" :rules="rules" ref="form" class="demo-ruleForm from" >
-                                <el-form-item label="用户名" prop="username">
-                                    <el-input v-model="form.username"></el-input>
+                                <el-form-item label="手机号" prop="username">
+                                    <el-input  v-model="form.username"></el-input>
                                 </el-form-item>
                                 <el-form-item label="输入密码" prop="password">
                                     <el-tooltip class="item" effect="dark" content="6-20个字符" placement="right">
@@ -83,6 +83,14 @@
                     callback();
                 }
             };
+            let validatePhone = (rule, value, callback) => {
+                var reg=/^1[3456789]\d{9}$/;
+                if (!reg.test(value)) {
+                    callback(new Error('手机号格式错误'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 form: {
                     username:'',
@@ -95,7 +103,8 @@
                 checked: false,
                 rules: {
                     username:[
-                        {required: true, message: '请输入用户名', trigger: 'blur'}
+                        { required: true, message: '请输入手机号', trigger: 'blur'},
+                        { validator: validatePhone, trigger: 'blur'}
                     ],
                     password: [
                         { validator: validatePass, required: true, trigger: 'blur' }
