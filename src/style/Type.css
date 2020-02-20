@@ -127,8 +127,6 @@ img {
 
 .factor-calendar {
     padding-left: 20px;
-    background: url(../assets/Type/tTab.png) no-repeat 0 -67px;
-    cursor: pointer;
 }
 .factor-less, .factor-more {
     width: 32px;

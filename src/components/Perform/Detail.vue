@@ -20,8 +20,6 @@
                             </div>
                             <div class="perform-notice">
                                 <div class="perform-notice-prefix">
-                                    <div class="speaker">
-                                    </div>
                                     <span >预售</span>
                                 </div>
                                 <div class="perform-notice-content hastitle">
@@ -34,116 +32,12 @@
                             <div class="citys">
                                 <label>城市</label>
                                 <div class="citylist">
-                                    <div class="cityitem">柳州站</div>
-                                    <div class="cityitem active">厦门站</div>
+                                    <div class="cityitem" @click="changeCityStatus('cityitem',item.id)" v-for="item in city" :key="item.name">{{item.name}}</div>
                                 </div>
                             </div>
                             <div class="perform__order__box">
                                 <div class="notice-time">
-                                    <img src="" class="notice-time-icon">场次时间均为演出当地时间</div>
-                                <div class="perform__order__select perform__order__select__calendar" style="display: none;">
-                                    <div class="select_left">日期</div>
-                                    <div class="select_right">
-                                        <div class="select_right_list">
-                                            <div class="main-container styles-conditional-class">
-                                                <div class="functional-calendar">
-                                                    <div class="wh_top_changge_buttons">
-                                                        <li></li>
-                                                        <li></li>
-                                                    </div>
-                                                    <div class="calendar-for">
-                                                        <section class="wh_container">
-                                                            <div class="wh_content_all">
-                                                                <div class="wh_top_changge">
-                                                                    <li class="wh_content_li"></li>
-                                                                </div>
-                                                                <div class="wh_content week">
-                                                                    <div class="wh_content_item">
-                                                                        <div class="wh_top_tag">
-                    周一
-                </div></div><div class="wh_content_item"><div class="wh_top_tag">
-                    周二
-                </div></div><div class="wh_content_item"><div class="wh_top_tag">
-                    周三
-                </div></div><div class="wh_content_item"><div class="wh_top_tag">
-                    周四
-                </div></div><div class="wh_content_item"><div class="wh_top_tag">
-                    周五
-                </div></div><div class="wh_content_item"><div class="wh_top_tag">
-                    周六
-                </div></div><div class="wh_content_item"><div class="wh_top_tag">
-                    周日
-                </div></div></div> <div class="wh_content month"><div class="wh_content_item"><div class="wh_item_date wh_other_dayhide cursor-pointer">
-                    27
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date wh_other_dayhide cursor-pointer">
-                    28
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date wh_other_dayhide cursor-pointer">
-                    29
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date wh_other_dayhide cursor-pointer">
-                    30
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date wh_other_dayhide cursor-pointer">
-                    31
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    1
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    2
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    3
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    4
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    5
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    6
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    7
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    8
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    9
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    10
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    11
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    12
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    13
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    14
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    15
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    16
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    17
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    18
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    19
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    20
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    21
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    22
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    23
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    24
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    25
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    26
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    27
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    28
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date cursor-pointer">
-                    29
-                </div> <!----> <!----></div><div class="wh_content_item"><div class="wh_item_date wh_other_dayhide cursor-pointer">
-                    1
-                </div> <!----> <!----></div></div></div></section></div></div></div></div></div></div>
+                                    <img src="../../assets/perform/p3.png" class="notice-time-icon">场次时间均为演出当地时间</div>
                                 <div class="perform__order__select perform__order__select__performs">
                                     <div class="select_left">场次</div>
                                     <div class="select_right">
@@ -159,24 +53,8 @@
                                     <div class="select_left">票档</div>
                                     <div class="select_right">
                                         <div class="select_right_list">
-                                            <div class="select_right_list_item sku_item">
-                                                <span class="notticket">缺货登记</span>
-                                                <div class="skuname">280元（看台）</div>
-                                            </div>
-                                            <div class="select_right_list_item sku_item active">
-                                                <div class="skuname">380元（看台）</div>
-                                            </div>
-                                            <div class="select_right_list_item sku_item">
-                                                <div class="skuname">480元（看台）</div>
-                                            </div>
-                                            <div class="select_right_list_item sku_item">
-                                                <div class="skuname">580元（内场）</div>
-                                            </div>
-                                            <div class="select_right_list_item sku_item">
-                                                <div class="skuname">780元（内场）</div>
-                                            </div>
-                                            <div class="select_right_list_item sku_item">
-                                                <div class="skuname">980元（内场）</div>
+                                            <div class="select_right_list_item sku_item" v-for="item in page" :key="item.id" @click="changePageStatus('sku_item',item.id)">
+                                                <div class="skuname">{{item.price}}元</div>
                                             </div>
                                         </div>
                                     </div>
@@ -209,7 +87,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div data-spm="dbuy" class="buybtn">立即预订</div>
+                                    <div class="buybtn">立即预订</div>
                                 </div>
                             </div>
                         </div>
@@ -217,11 +95,11 @@
                 </div>
                 <div class="perform__bd">
                     <div class="notice">
-                        <div class="notice-nav-fixed" style="display: none;">
+                        <div class="notice-nav-fixed">
                             <div class="notice-nav-fixed-wrap">
                                 <span class="notice-nav-item notice-nav-item-active" @click="toPosition('detail',0)">
                                     项目详情
-                                    <span class="notice-nav-item-flag" style=""></span>
+                                    <span class="notice-nav-item-flag"></span>
                                 </span>
                                 <span class="notice-nav-item" @click="toPosition('notice0',1)">
                                     购票须知
@@ -415,12 +293,42 @@
 
 <script>
     import '@/style/Perform.css'
+    import $ from 'jquery'
     export default {
         name: "Detail",
         data(){
             return{
                 num:1,
-                price:380
+                price:380,
+                page:[
+                    {
+                    id:1,
+                    price:280,
+                },
+                    {
+                    id:2,
+                    price:380,
+                },
+                    {
+                    id:3,
+                    price:480,
+                },
+                    {
+                    id:4,
+                    price:580,
+                },
+                    {
+                    id:5,
+                    price:780,
+                },
+                    {
+                    id:6,
+                    price:980,
+                }
+                ],
+                city:[
+                    {id:1,name:'柳州站'},
+                    {id:2,name:'厦门站'}]
             }
         },
         computed:{
@@ -428,12 +336,23 @@
                 return this.num * this.price;
             },
         },
+        mounted(){
+            window.addEventListener('scroll', this.scrollToTop);
+            this.changeCityStatus('cityitem',2);
+            this.changePageStatus('sku_item',2)
+        },
+        destroyed(){
+            window.removeEventListener('scroll', this.scrollToTop);
+        },
         methods:{
             toPosition(val,index){
                 let li = document.getElementById(val);
+                li.scrollIntoView();
+                this.changeTab(index);
+            },
+            changeTab(index){
                 let aList = document.getElementsByClassName('notice-nav-item');
                 let bList = document.getElementsByClassName('notice-nav-item-flag');
-                li.scrollIntoView();
                 for(let i = 0;i < aList.length;i++){
                     if(i === index || i === index+3){
                         aList[i].className = 'notice-nav-item notice-nav-item-active';
@@ -451,8 +370,49 @@
             },
             handleChange(value) {
                 console.log(value);
+            },
+            scrollToTop () {
+                const that = this;
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+                that.scrollTop = scrollTop;
+
+                if(that.scrollTop > document.getElementById('detail').offsetTop){
+                    this.changeTab(0);
+                    document.getElementsByClassName("notice-nav-fixed")[0].style.display = "block";
+                }else{
+                    document.getElementsByClassName("notice-nav-fixed")[0].style.display = "none";
+                }
+                if(that.scrollTop > document.getElementById('notice0').offsetTop){
+                    this.changeTab(1);
+                }
+                if(that.scrollTop > document.getElementById('notice1').offsetTop){
+                    this.changeTab(2);
+                }
+            },
+            changeCityStatus(val,index){
+                let list = $('.'+val);
+                for(let j = 0;j < list.length;j++){
+                    if(j === index - 1){
+                        list[j].className = val+' active';
+                    }else {
+                        list[j].className = val;
+                    }
+                }
+            },
+            changePageStatus(val,index){
+                let list = $('.'+val);
+                for(let j = 0;j < list.length;j++){
+                    if(j === index - 1){
+                        list[j].className = val+' select_right_list_item active';
+                    }else {
+                        list[j].className = val+' select_right_list_item';
+                    }
+                }
+                this.price = this.page[index-1].price;
+                this.num = 1;
             }
-        }
+        },
+
     }
 </script>
 

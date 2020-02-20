@@ -29,7 +29,7 @@
     font-size: 14px;
 }
 .right-content .support-no {
-    background-image: url(//img.alicdn.com/tfs/TB1d7mWRMHqK1RjSZFEXXcGMXXa-24-26.png);
+    background-image: url(../assets/perform/p1.png);
 }
 .right-content .support-icon {
     display: inline-block;
@@ -46,7 +46,7 @@
     color: #999;
 }
 .right-content .support-yes {
-    background-image: url(//img.alicdn.com/tfs/TB1b7uJRSrqK1RjSZK9XXXyypXa-24-24.png);
+    background-image: url(../assets/perform/p2.png);
 }
 .content-right {
     -webkit-box-sizing: border-box;
@@ -147,18 +147,6 @@
     margin-bottom: 10px;
     font-size: 14px;
 }
-.perform-notice-prefix .speaker {
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    background: url(//img.alicdn.com/tfs/TB1SMzDdHj1gK0jSZFOXXc7GpXa-36-36.png) no-repeat;
-    -webkit-background-size: 100% 100%;
-    -moz-background-size: 100%;
-    background-size: 100%;
-    vertical-align: middle;
-    display: none;
-    margin-right: 5px;
-}
 .perform-notice-prefix span {
     vertical-align: middle;
 }
@@ -167,22 +155,6 @@
 }
 .perform-notice-content-detail {
     color: #999;
-}
-.perform-notice-content:after {
-    content: "";
-    position: absolute;
-    right: 12px;
-    bottom: 18px;
-    display: block;
-    width: 4px;
-    height: 4px;
-    border-right: 1px solid #4a4a4a;
-    border-top: 1px solid #4a4a4a;
-    -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    transform: rotate(45deg);
 }
 .citys {
     margin-top: 24px;
@@ -465,6 +437,7 @@
 }
 .notice-nav-fixed {
     position: fixed;
+    display: none;
     top: 0;
     left: 0;
     right: 0;

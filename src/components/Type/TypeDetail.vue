@@ -15,9 +15,9 @@
                                 <span class="factor-selected-city">全国</span>
                             </div>
                             <div class="factor-content-main">
-                                <span class="factor-content-item factor-content-item-default factor-content-item-active">全部</span>
+                                <span class="factor-content-item city factor-content-item-active" @click="changeTypeStatus('city',0)">全部</span>
                                 <div class="factor-content">
-                                    <span class="factor-content-item">上海</span>
+                                    <span class="factor-content-item city" @click="changeTypeStatus('city',item.id)" v-for="item in city" :key="item.id">{{item.name}}</span>
                                 </div>
                                 <div class="factor-more">更多</div>
                             </div>
@@ -29,9 +29,9 @@
                         </span>
                         <div class="factor-content">
                             <div class="factor-content-main">
-                                <span class="factor-content-item factor-content-item-default factor-content-item-active">全部</span>
+                                <span class="factor-content-item type factor-content-item-active" @click="changeTypeStatus('type',0)">全部</span>
                                 <div class="factor-content">
-                                    <span class="factor-content-item">上海</span>
+                                    <span class="factor-content-item type" @click="changeTypeStatus('type',item.id)" v-for="item in type" :key="item.id">{{item.name}}</span>
                                 </div>
                             </div>
                         </div>
@@ -55,15 +55,22 @@
                         </span>
                         <div class="factor-content">
                             <div class="factor-content-main">
-                                <span class="factor-content-item factor-content-item-default factor-content-item-active">全部</span>
+                                <span class="factor-content-item time factor-content-item-active" @click="changeTypeStatus('time',0)">全部</span>
                                 <div class="factor-content">
-                                    <span class="factor-content-item">今天</span>
-                                    <span class="factor-content-item">明天</span>
-                                    <span class="factor-content-item">本周末</span>
-                                    <span class="factor-content-item">一个月内</span>
+                                    <span class="factor-content-item time" @click="changeTypeStatus('time',item.id)" v-for="item in time" :key="item.id">{{item.name}}</span>
                                     <div class="calendar">
                                         <div class="calendar-slot">
-                                            <div class="factor-calendar" >按日历</div>
+                                            <div class="factor-calendar" >
+                                                <el-date-picker
+                                                        v-model="value1"
+                                                        align="right"
+                                                        type="date"
+                                                        placeholder="选择日期"
+                                                        size="mini"
+                                                        style="width: 130px;"
+                                                        :picker-options="pickerOptions">
+                                                </el-date-picker>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -73,10 +80,7 @@
                 </div>
                 <div class="search-sort search-main-sort">
                     <div class="search-sort_fl">
-                        <span class="search-sort-item">相关度排序</span>
-                        <span class="search-sort-item search-sort-item-active">推荐排序</span>
-                        <span class="search-sort-item" >最近开场</span>
-                        <span class="search-sort-item">最新上架</span>
+                        <span class="search-sort-item" @click="changeTabStatus('search-sort-item',item.id)" v-for="item in tab" :key="item.id">{{item.name}}</span>
                     </div>
                     <div class="pagination-top search-sort_fr">
                         <a @click="handleClick('prev')" class="sort__prev sort__prev_gray"></a>
@@ -171,10 +175,12 @@
 
 <script>
     import '@/style/Type.css'
+    import $ from "jquery";
     export default {
         name: "TypeDetail",
         data(){
             return{
+                value1:'',
                 currentPage:1,
                 item:{
                     total:100,
@@ -230,8 +236,57 @@
                     {img:require('../../assets/Main/list/21.jpg'),title:'周子琰「正确人类的聚会」2020巡回演唱会 北京站',position:'MAO Livehouse北京',time:'2020.05.15 周五 20:30',price:'100.0'},
                     {img:require('../../assets/Main/list/22.jpg'),title:'周子琰「正确人类的聚会」2020巡回演唱会 北京站',position:'MAO Livehouse北京',time:'2020.05.15 周五 20:30',price:'100.0'},
                     {img:require('../../assets/Main/list/23.jpg'),title:'周子琰「正确人类的聚会」2020巡回演唱会 北京站',position:'MAO Livehouse北京',time:'2020.05.15 周五 20:30',price:'100.0'},
-                ]
+                ],
+                type:[
+                    {id:1,name:'音乐会'},
+                    {id:2,name:'话剧'},
+                    {id:3,name:'歌剧'},
+                    {id:4,name:'展览休闲'},
+                    {id:5,name:'演唱会'},
+                    {id:6,name:'曲苑杂坛'},
+                    {id:7,name:'舞蹈芭蕾'},
+                    {id:8,name:'曲苑杂坛'},
+                    {id:9,name:'体育'},
+                    {id:10,name:'儿童亲子'},
+                    {id:11,name:'旅游演艺'},
+                ],
+                tab:[
+                    {id:1,name:'相关度排序'},
+                    {id:2,name:'推荐排序'},
+                    {id:3,name:'最近开场'},
+                    {id:4,name:'最新上架'},
+                ],
+                city:[
+                    {id:1,name:'上海'},
+                    {id:2,name:'北京'},
+                    {id:3,name:'天津'},
+                    {id:4,name:'成都'},
+                    {id:5,name:'绵阳'},
+                    {id:6,name:'西双版纳'},
+                    {id:7,name:'西藏'},
+                    {id:8,name:'内蒙古'},
+                    {id:9,name:'巴黎'},
+                    {id:10,name:'东京'},
+                    {id:11,name:'北海道'},
+                ],
+                time:[
+                    {id:1,name:'今天'},
+                    {id:2,name:'明天'},
+                    {id:3,name:'本周末'},
+                    {id:4,name:'一个月内'},
+                ],
+                pickerOptions: {
+                    disabledDate(time) {
+                        return time.getTime() < Date.now() - 8.64e7;
+                    }
+                }
             }
+        },
+        mounted(){
+            this.changeTypeStatus('time',0);
+            this.changeTypeStatus('city',0);
+            this.changeTypeStatus('type',0);
+            this.changeTabStatus('search-sort-item',2);
         },
         methods:{
             handleCurrentChange(val) {
@@ -260,7 +315,34 @@
                     i.style.pointerEvents = 'auto';
                     j.style.pointerEvents = 'auto';
                 }
-            }
+            },
+            changeTypeStatus(val,index){
+                let list = $('.'+val);
+                for(let j = 0;j < list.length;j++){
+                    if(j === index){
+                        list[j].className = val+' factor-content-item factor-content-item-active';
+                    }else {
+                        list[j].className = val+' factor-content-item';
+                    }
+                }
+                if(val === 'city'){
+                    if(index === 0){
+                        $('.factor-selected-city').html('全部');
+                    }else {
+                        $('.factor-selected-city').html(this.city[index-1].name);
+                    }
+                }
+            },
+            changeTabStatus(val,index){
+                let list = $('.'+val);
+                for(let j = 0;j < list.length;j++){
+                    if(j === index - 1){
+                        list[j].className = val+' search-sort-item-active';
+                    }else {
+                        list[j].className = val;
+                    }
+                }
+            },
 
         }
     }
