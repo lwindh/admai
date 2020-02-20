@@ -126,4 +126,7 @@
     .category__icon__lyzl {
         background-position: 0 -540px;
     }
+    .category__info:hover {
+        color: #ff1268;
+    }
 </style>

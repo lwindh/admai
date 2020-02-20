@@ -147,7 +147,7 @@
             </div>
             <div class="recommend-header">
                 <a href="/" class="type-recommend select">首页</a>
-                <a href="#" class="type-recommend">分类</a>
+                <router-link to="/Type" class="type-recommend">分类</router-link>
             </div>
             <div class="right-header">
                 <div class="box-header user-header" @mouseenter="enter('list-wrap')" @mouseleave="leave('list-wrap')">
@@ -196,7 +196,7 @@
 </template>
 
 <script>
-    import '../../style/mainHeader.css'
+    import '@/style/mainHeader.css'
     export default {
         name: "Header",
         methods:{

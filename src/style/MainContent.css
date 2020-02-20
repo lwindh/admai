@@ -158,3 +158,12 @@ a {
 .dm-content-wrap .dm-content .box .box-right .box-right__item .iteminfo .price span {
     font-size: 12px;
 }
+.location-header .city-header .name-city:hover {
+    color: #FF1268;
+}
+.dm-content .box .box-right .box-right__item .iteminfo .showtime:hover, .dm-content .box .box-right .box-right__item .iteminfo .title:hover, .dm-content .box .box-right .box-right__item .iteminfo .venue:hover {
+    color: #FF1268;
+}
+.dm-content .box .box-left .box-left__info .details:hover, .dm-content .box .box-left .box-left__info .title:hover {
+    color: #FF1268;
+}

@@ -1,24 +1,15 @@
 <template>
   <div id="app">
-    <Header/>
-    <Carousel/>
-    <Category/>
-    <MainDetail/>
+    <Index/>
   </div>
 </template>
 
 <script>
-import Header from './components/Main/Header'
-import Carousel from './components/Main/Carousel'
-import Category from './components/Main/Category'
-import MainDetail from './components/Main/MainDetail'
+import Index from '@/pages/index'
 export default {
   name: 'App',
   components: {
-    Header,
-    Carousel,
-    Category,
-    MainDetail
+    Index
   }
 }
 </script>
@@ -27,5 +18,12 @@ export default {
   body{
     padding: 0;
     margin: 0;
+  }
+  body, html {
+    font-size: 14px;
+    font-family: "\5FAE\8F6F\96C5\9ED1";
+  }
+  img{
+    border: 0;
   }
 </style>
