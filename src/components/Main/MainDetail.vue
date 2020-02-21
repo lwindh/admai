@@ -3,8 +3,8 @@
         <div class="dm-content" style="display: block;" v-for="j in item" :key="j.title">
             <div class="head">
                 <span class="head-title">{{j.title}}</span>
-                <a href="" target="_blank">
-                    <span class="head-more">查看全部</span>
+                <a target="_blank">
+                    <span class="head-more" @click = "clickFun($event,j.title)">查看全部</span>
                 </a>
             </div>
             <div class="box">
@@ -70,7 +70,7 @@
                         ]
                     },
                     {
-                        title:'体育比赛',
+                        title:'体育',
                         img:require("../../assets/Main/list/31.jpg"),
                         title1:'蔡依林 Ugly Beauty 2020 世界巡回演唱会佛山站 ',
                         price:'399',
@@ -97,11 +97,35 @@
                             {img:require("../../assets/Main/list/47.jpg"),title:'2020任贤齐【齐迹】巡回演唱会-沈阳站', price:'399', position:'辽宁体育馆(奥体中心西侧)', time:'2020.05.23 周六 19:30'}
                         ]
                     }
+                ],
+                li:{id:0,name:''},
+                type:[
+                    {id:1,name:'音乐会'},
+                    {id:2,name:'话剧歌剧'},
+                    {id:3,name:'展览休闲'},
+                    {id:4,name:'演唱会'},
+                    {id:5,name:'曲苑杂坛'},
+                    {id:6,name:'舞蹈芭蕾'},
+                    {id:7,name:'体育'},
+                    {id:8,name:'儿童亲子'},
+                    {id:9,name:'旅游展览'},
+                    {id:10,name:'二次元'},
                 ]
             }
         },
         methods:{
-
+            clickFun(e,index) {
+                const res = this.type.find((item) => {
+                    if(item.name === index)
+                    return item.id;
+                });
+                this.li.id = res.id;
+                this.li.name = index;
+                this.$store.commit("changeType",this.li);
+                this.$router.push({
+                    path: `/Type`,
+                })
+            }
         }
     }
 </script>

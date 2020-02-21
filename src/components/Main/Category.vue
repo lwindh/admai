@@ -48,8 +48,7 @@
         name: "Category",
         data(){
             return{
-                type:{id:'',name:''}
-                ,
+                type:{id:'',name:''},
             }
         },
         methods:{

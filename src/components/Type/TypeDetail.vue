@@ -282,6 +282,7 @@
             }
         },
         mounted(){
+            document.documentElement.scrollTop = 0;
             this.changeTypeStatus('time',0);
             this.changeTypeStatus('city',0);
             this.changeTypeStatus('type',this.$store.state.type.id);
