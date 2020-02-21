@@ -8,7 +8,7 @@
                         <el-col :span="8"><div class="grid-content bg-purple">
                             <el-form status-icon label-width="100px" :model="form" :rules="rules" ref="form" class="demo-ruleForm from" >
                                 <el-form-item label="手机号" prop="username">
-                                    <el-input  v-model="form.username"></el-input>
+                                    <el-input @change="checkPhone" v-model="form.username"></el-input>
                                 </el-form-item>
                                 <el-form-item label="输入密码" prop="password">
                                     <el-tooltip class="item" effect="dark" content="6-20个字符" placement="right">
@@ -87,7 +87,9 @@
                 var reg=/^1[3456789]\d{9}$/;
                 if (!reg.test(value)) {
                     callback(new Error('手机号格式错误'));
-                } else {
+                } else if(this.status){
+                    callback(new Error('手机号已被注册'));
+                } else{
                     callback();
                 }
             };
@@ -100,6 +102,7 @@
                     check:0,
                     check1:0
                 },
+                status:false,
                 checked: false,
                 rules: {
                     username:[
@@ -128,18 +131,66 @@
             },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
-                    if (valid && this.$store.state.status) {
+                    if (valid && this.check1 !== 0) {
+                        this.$axios({
+                            method:"post",
+                            url:"http://118.31.7.87:8080/user/register",
+                            headers:{
+                            'Content-Type': 'application/json'
+                            },
+                            data:{
+                                "password": this.form.password,
+                                "phoneNumber": this.form.username
+                            }
+                        }).then(res =>{
+                            if(res.data.msg === "注册成功"){
+                                this.$axios.post("http://118.31.7.87:8080/user/login",
+                                    {
+                                        account: this.form.username,
+                                        password: this.form.password
+                                    }
+                                ).then(res1 =>{
+                                    // console.log(res);
+                                    if(res1.data.msg === '成功'){
+                                        this.$store.commit('getUser',res1.data.data);
+                                        this.$router.push({
+                                            path: `/`
+                                        })
+                                    }
+                                }).catch(err =>{
+                                    console.log(err);
+                                });
+                            }else{
+                                this.$message.error('注册失败!');
+                            }
+                        }).catch(err =>{
+                            console.log(err);
+                        });
                         alert('submit!');
                     } else {
                         console.log('error submit!!');
                         return false;
                     }
                 });
+                //
             },
             checkedChange(){
                 this.form.check = this.checked ? 1:0;
+            },
+            checkPhone(){
+                this.$axios.get("http://118.31.7.87:8080/user/register/phone?phoneNumber="+this.form.username
+                ).then(res =>{
+                    console.log(res);
+                    if(res.data.msg === '手机号未注册'){
+                        this.status = false;
+                    }else{
+                        this.status = true;
+                    }
+                    this.$refs['form'].validateField('username')
+                }).catch(err =>{
+                    console.log(err);
+                });
             }
-
         }
     }
 </script>

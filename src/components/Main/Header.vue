@@ -35,20 +35,33 @@
             </div>
             <div class="right-header">
                 <div class="box-header user-header" @mouseenter="enter('list-wrap')" @mouseleave="leave('list-wrap')">
-                    <a href="javascript:void(0)">
+                    <router-link to="/Manage" v-if="user.nickName != null">
+                        <img class="i-box-header i-user" :src="user.avatar">
+                    </router-link>
+                    <router-link to="/Login" v-else>
                         <img class="i-box-header i-user" src="../../assets/Main/user.png">
-                    </a>
-                    <div class="login-user show">
-                        <RouterLink to="/Login">
+                    </router-link>
+                    <router-link to="/Manage" v-if="user.nickName != null">
+                        <div class="span-box-header name-user show">{{user.nickName}}</div>
+                    </router-link>
+                    <div class="login-user show" v-else>
+                        <router-link to="/Login" >
                             <span class="span-box-header span-user">登录</span>
-                        </RouterLink>
+                        </router-link>
                     </div>
-                    <div class="list-wrap">
+                    <div class="list-wrap" v-if="user.nickName != null">
                         <div class="list-login">
-                            <a href="//passport.damai.cn/accountinfo/myinfo" class="li-login select">个人信息</a>
-                            <a href="//my.damai.cn/account/accountSafe" class="li-login">账号设置</a>
-                            <a href="//orders.damai.cn/orderList" class="li-login">订单管理</a>
-                            <a href="//passport.damai.cn/account/logout" class="li-login out-login">退出登录</a>
+                            <router-link to="/Manage" class="li-login select">个人信息</router-link>
+                            <router-link to="/Manage" class="li-login">账号设置</router-link>
+                            <router-link to="/Manage" class="li-login">订单管理</router-link>
+                            <router-link to="/Manage" class="li-login">退出登录</router-link>
+                        </div>
+                    </div>
+                    <div class="list-wrap" v-else>
+                        <div class="list-login">
+                            <router-link to="/Login" class="li-login select">个人信息</router-link>
+                            <router-link to="/Login" class="li-login">账号设置</router-link>
+                            <router-link to="/Login" class="li-login">订单管理</router-link>
                         </div>
                     </div>
                 </div>
@@ -178,8 +191,12 @@
                     {name:'重庆'},
                     {name:'成都'},
                     {name:'中国香港'},
-                ]
+                ],
+                user:{}
             }
+        },
+        mounted(){
+            this.user = this.$store.state.user;
         },
         methods:{
             enter(item){
@@ -196,6 +213,7 @@
             },
             clickCity(e) {
                 this.city = e.target.innerHTML;// 是你点击的元素
+                this.$store.commit('changeCity',this.city);
                 $(".city-location").html(this.city);
                 $('.select-city').html(this.city);
             }

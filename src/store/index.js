@@ -9,6 +9,10 @@ const state = {
         id:0,
         name:'全部'
     },
+    city:{
+        name:'全部'
+    },
+    user:{}
 }
 
 const mutations = {
@@ -18,6 +22,12 @@ const mutations = {
     changeType(type,params){
         type.type.id = params.id;
         type.type.name = params.name;
+    },
+    changeCity(city,params){
+        city.type.name = params;
+    },
+    getUser:(state,params)=>{
+        state.user = params;
     }
 }
 
@@ -27,6 +37,12 @@ const actions = {
     },
     changeType:({commit}) => {
         commit('changeType')
+    },
+    getUser:({commit}) => {
+        commit('getUser')
+    },
+    changeCity:({commit}) => {
+        commit('changeCity')
     }
 }
 

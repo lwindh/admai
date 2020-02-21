@@ -6,7 +6,7 @@
             </a>
             <div class="container">
                 <div id="login">
-                    <div class="login-tabs">
+                    <div class="login-tabs" style="font-size: 24px;margin-bottom: 20px;margin-top: 10px;">
                         <p>密码登录</p>
                     </div>
                     <div class="login-content">
@@ -32,14 +32,14 @@
                                     </label>
                                 </div>
                                 <div>
-                                    <input type="text" class="fm-text" placeholder="请输入登录密码" v-model="form.password">
+                                    <input type="password" class="fm-text" placeholder="请输入登录密码" v-model="form.password">
                                 </div>
                             </div>
                             <div>
                                 <button class="fm-btn" @click="onSubmit()">登录</button>
                             </div>
                             <div class="login-blocks">
-                                <a href="">忘记密码</a>
+                                <router-link to="/FindPassword">忘记密码</router-link>
                                 <RouterLink to="/Register">免费注册</RouterLink>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                     username: '',
                     password: ''
                 },
-                msg:''
+                msg:'',
             }
         },
         methods:{
@@ -73,34 +73,25 @@
                     l.style.display="block";
                     this.msg="请输入密码";
                 }else{
-                    this.$axios({
-                        method: "post",
-                        url: "http://chenkl.cn:3036/api/basecontent/update/info",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        data: {
-                            username: this.form.username,
+                    this.$axios.post("http://118.31.7.87:8080/user/login",
+                        {
+                            account: this.form.username,
                             password: this.form.password
                         }
-                    })
-                        .then(res =>{
-                            console.log(res.data);
-                            if(res.data.status === 'success'){
-                                this.$router.push({
-                                    name:"index",
-                                    query: {
-                                        username: this.form.username
-                                    }
-                                });
-                            }else{
-                                l.style.display="block";
-                                this.msg="用户名或密码不正确";
-                            }
-                        })
-                        .catch(err =>{
-                            console.log(err);
-                        });
+                    ).then(res =>{
+                        // console.log(res);
+                        if(res.data.msg === '成功'){
+                            this.$store.commit('getUser',res.data.data);
+                            this.$router.push({
+                                path: `/`
+                            })
+                        }else{
+                            l.style.display="block";
+                            this.msg="用户名或密码错误";
+                        }
+                    }).catch(err =>{
+                        console.log(err);
+                    });
                 }
             }
         }

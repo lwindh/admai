@@ -26,4 +26,7 @@ export default {
   img{
     border: 0;
   }
+  a {
+    text-decoration: none;
+  }
 </style>

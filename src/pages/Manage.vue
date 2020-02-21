@@ -2,20 +2,22 @@
     <div>
         <BackTop/>
         <Header/>
-        <TypeDetail/>
+        <Lab/>
     </div>
+
 </template>
 
 <script>
+    import Lab from '@/components/Manage/ManageTab'
     import BackTop from "@/components/BackTop";
     import Header from "@/components/Main/Header";
-    import TypeDetail from "@/components/Type/TypeDetail";
+
     export default {
-        name: "Type",
+        name: "Manager",
         components:{
+            Lab,
             BackTop,
-            TypeDetail,
-            Header
+            Header,
         },
         mounted(){
             this.change();
@@ -25,8 +27,7 @@
                 document.getElementsByClassName('location-header')[0].style.display = "none";
                 let list = document.getElementsByClassName('type-recommend');
                 list[0].className = 'type-recommend';
-                list[1].className = 'type-recommend select';
-            },
+            }
         }
     }
 </script>

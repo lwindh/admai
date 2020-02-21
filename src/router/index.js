@@ -5,6 +5,8 @@ import Index from '@/App'
 import Registered from "@/pages/Registered";
 import Type from "@/pages/Type";
 import Perform from '@/pages/Perform'
+import FindPassword from "@/pages/FindPassword";
+import Manage from '@/pages/Manage'
 
 Vue.use(Router)
 
@@ -38,6 +40,16 @@ export default new Router({
       path: '/Perform',
       name: 'Perform',
       component: Perform
+    },
+    {
+      path: '/FindPassword',
+      name: 'FindPassword',
+      component: FindPassword
+    },
+    {
+      path: '/Manage',
+      name: 'Manage',
+      component: Manage
     }
   ]
 })

@@ -185,9 +185,6 @@ img{
     color:#FF1268;
     background-color:#fff4f8
 }
-.right-header .user-header .list-login .out-login {
-    display: none;
-}
 .right-header .box-header {
     height: 100%;
     display: inline-block;
@@ -224,6 +221,18 @@ img{
     display: inline-block;
     margin-right: 4px;
     vertical-align: middle;
+}
+.right-header .user-header .i-user {
+    border-radius: 13px;
+}
+.right-header .user-header .show {
+    display: inline-block;
+}
+.right-header .user-header .name-user {
+    max-width: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .search-header {
     width: 401px;
