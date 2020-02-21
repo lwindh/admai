@@ -31,7 +31,7 @@
                 let list = document.getElementsByClassName('type-recommend');
                 list[0].className = 'type-recommend';
                 list[1].className = 'type-recommend select';
-            }
+            },
         }
     }
 </script>

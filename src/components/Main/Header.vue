@@ -147,7 +147,7 @@
             </div>
             <div class="recommend-header">
                 <a href="/" class="type-recommend select">首页</a>
-                <router-link to="/Type" class="type-recommend">分类</router-link>
+                <a class="type-recommend" @click = "clickFun()">分类</a>
             </div>
             <div class="right-header">
                 <div class="box-header user-header" @mouseenter="enter('list-wrap')" @mouseleave="leave('list-wrap')">
@@ -199,12 +199,23 @@
     import '@/style/mainHeader.css'
     export default {
         name: "Header",
+        data(){
+            return{
+                type:{id:0,name:'全部'},
+            }
+        },
         methods:{
             enter(item){
                 document.getElementsByClassName(item)[0].style.display = "block";
             },
             leave(item){
                 document.getElementsByClassName(item)[0].style.display = "none";
+            },
+            clickFun() {
+                this.$store.commit("changeType",this.type);
+                this.$router.push({
+                    path: `/Type`,
+                })
             }
         }
     }

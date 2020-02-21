@@ -1,42 +1,42 @@
 <template>
     <div class="category">
-        <a href="" class="category__list">
+        <a class="category__list" @click = "clickFun($event,4)">
             <span class="category__icon category__icon__ych"></span>
             <p class="category__info">演唱会</p>
         </a>
-        <a href="" class="category__list">
+        <a class="category__list" @click = "clickFun($event,2)">
             <span class="category__icon category__icon__gjhj"></span>
             <p class="category__info">话剧歌剧</p>
         </a>
-        <a href="" class="category__list">
+        <a class="category__list" @click = "clickFun($event,7)">
             <span class="category__icon category__icon__tyjj"></span>
             <p class="category__info">体育</p>
         </a>
-        <a href="" class="category__list">
+        <a class="category__list" @click = "clickFun($event,8)">
             <span class="category__icon category__icon__qz"></span>
             <p class="category__info">儿童亲子</p>
         </a>
-        <a href="" class="category__list">
+        <a class="category__list" @click = "clickFun($event,3)">
             <span class="category__icon category__icon__zlxx"></span>
             <p class="category__info">展览休闲</p>
         </a>
-        <a href="" class="category__list">
+        <a class="category__list" @click = "clickFun($event,1)">
             <span class="category__icon category__icon__yyh"></span>
             <p class="category__info">音乐会</p>
         </a>
-        <a href="" class="category__list">
+        <a class="category__list" @click = "clickFun($event,5)">
             <span class="category__icon category__icon__xsxq"></span>
             <p class="category__info">曲苑杂坛</p>
         </a>
-        <a href="" class="category__list">
+        <a class="category__list" @click = "clickFun($event,6)">
             <span class="category__icon category__icon__wdbl"></span>
             <p class="category__info">舞蹈芭蕾</p>
         </a>
-        <a href="" class="category__list">
+        <a class="category__list" @click = "clickFun($event,10)">
             <span class="category__icon category__icon__dm"></span>
             <p class="category__info">二次元</p>
         </a>
-        <a href="" class="category__list">
+        <a class="category__list" @click = "clickFun($event,9)">
             <span class="category__icon category__icon__lyzl"></span>
             <p class="category__info">旅游展览</p>
         </a>
@@ -45,7 +45,23 @@
 
 <script>
     export default {
-        name: "Category"
+        name: "Category",
+        data(){
+            return{
+                type:{id:'',name:''}
+                ,
+            }
+        },
+        methods:{
+            clickFun(e,index) {
+                this.type.id = index;
+                this.type.name = e.currentTarget.lastChild.innerHTML;// 是你绑定事件的元素
+                this.$store.commit("changeType",this.type);
+                this.$router.push({
+                    path: `/Type`,
+                })
+            }
+        }
     }
 </script>
 

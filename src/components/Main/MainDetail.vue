@@ -37,7 +37,7 @@
 <script>
     import '@/style/MainContent.css'
     export default {
-        name: "content",
+        name: "MainContent",
         data(){
             return{
                 item:[

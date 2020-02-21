@@ -239,16 +239,15 @@
                 ],
                 type:[
                     {id:1,name:'音乐会'},
-                    {id:2,name:'话剧'},
-                    {id:3,name:'歌剧'},
-                    {id:4,name:'展览休闲'},
-                    {id:5,name:'演唱会'},
-                    {id:6,name:'曲苑杂坛'},
-                    {id:7,name:'舞蹈芭蕾'},
-                    {id:8,name:'曲苑杂坛'},
-                    {id:9,name:'体育'},
-                    {id:10,name:'儿童亲子'},
-                    {id:11,name:'旅游演艺'},
+                    {id:2,name:'话剧歌剧'},
+                    {id:3,name:'展览休闲'},
+                    {id:4,name:'演唱会'},
+                    {id:5,name:'曲苑杂坛'},
+                    {id:6,name:'舞蹈芭蕾'},
+                    {id:7,name:'体育'},
+                    {id:8,name:'儿童亲子'},
+                    {id:9,name:'旅游展览'},
+                    {id:10,name:'二次元'},
                 ],
                 tab:[
                     {id:1,name:'相关度排序'},
@@ -285,7 +284,7 @@
         mounted(){
             this.changeTypeStatus('time',0);
             this.changeTypeStatus('city',0);
-            this.changeTypeStatus('type',0);
+            this.changeTypeStatus('type',this.$store.state.type.id);
             this.changeTabStatus('search-sort-item',2);
         },
         methods:{
