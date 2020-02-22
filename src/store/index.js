@@ -12,7 +12,8 @@ const state = {
     city:{
         name:'全部'
     },
-    user:{}
+    user:{},
+    cityList:{},
 }
 
 const mutations = {
@@ -28,6 +29,9 @@ const mutations = {
     },
     getUser:(state,params)=>{
         state.user = params;
+    },
+    setCityList:(state,params)=>{
+        state.cityList = params;
     }
 }
 
@@ -43,6 +47,9 @@ const actions = {
     },
     changeCity:({commit}) => {
         commit('changeCity')
+    },
+    setCityList:({commit}) => {
+        commit('setCityList')
     }
 }
 

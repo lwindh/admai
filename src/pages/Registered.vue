@@ -153,9 +153,15 @@
                                     // console.log(res);
                                     if(res1.data.msg === '成功'){
                                         this.$store.commit('getUser',res1.data.data);
-                                        this.$router.push({
-                                            path: `/`
-                                        })
+                                        if(this.$route.query.path != null){
+                                            this.$router.push({
+                                                path: this.$route.query.path
+                                            })
+                                        }else {
+                                            this.$router.push({
+                                                path: `/`
+                                            })
+                                        }
                                     }
                                 }).catch(err =>{
                                     console.log(err);

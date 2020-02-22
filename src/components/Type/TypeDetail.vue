@@ -17,9 +17,9 @@
                             <div class="factor-content-main">
                                 <span class="factor-content-item city factor-content-item-active" @click="changeTypeStatus('city',0)">全部</span>
                                 <div class="factor-content">
-                                    <span class="factor-content-item city" @click="changeTypeStatus('city',item.id)" v-for="item in city" :key="item.id">{{item.name}}</span>
+                                    <span class="factor-content-item city" @click="changCityStatus(item.name,$event)" v-for="item in city" :key="item.id">{{item.name}}</span>
                                 </div>
-                                <div class="factor-more">更多</div>
+                                <!--<div class="factor-more">更多</div>-->
                             </div>
                         </div>
                     </div>
@@ -283,6 +283,7 @@
         },
         mounted(){
             document.documentElement.scrollTop = 0;
+            this.city = this.$store.state.cityList;
             this.changeTypeStatus('time',0);
             this.changeTypeStatus('city',0);
             this.changeTypeStatus('type',this.$store.state.type.id);
@@ -333,6 +334,14 @@
                     }
                 }
             },
+            changCityStatus(val,e){
+                let list = $('.city');
+                for(let j = 0;j < list.length;j++){
+                    list[j].className = 'city factor-content-item';
+                }
+                e.target.className = 'city factor-content-item factor-content-item-active';
+                $('.factor-selected-city').html(e.target.innerHTML);
+            },
             changeTabStatus(val,index){
                 let list = $('.'+val);
                 for(let j = 0;j < list.length;j++){
@@ -343,7 +352,6 @@
                     }
                 }
             },
-
         }
     }
 </script>

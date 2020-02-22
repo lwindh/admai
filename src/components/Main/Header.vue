@@ -23,7 +23,7 @@
                         <div class="other-city">
                             <span class="title-city">其他城市:</span>
                             <div class="list-other">
-                                <span class="name-city" v-for="item in otherCitys" :key="item.city" @click="clickCity($event)">{{item.city}}</span>
+                                <span class="name-city" v-for="item in otherCitys" :key="item.id" @click="clickCity($event)">{{item.name}}</span>
                             </div>
                         </div>
                     </div>
@@ -45,23 +45,23 @@
                         <div class="span-box-header name-user show">{{user.nickName}}</div>
                     </router-link>
                     <div class="login-user show" v-else>
-                        <router-link to="/Login" >
+                        <a @click="toLogin()">
                             <span class="span-box-header span-user">登录</span>
-                        </router-link>
+                        </a>
                     </div>
                     <div class="list-wrap" v-if="user.nickName != null">
                         <div class="list-login">
                             <router-link to="/Manage" class="li-login select">个人信息</router-link>
                             <router-link to="/Manage" class="li-login">账号设置</router-link>
                             <router-link to="/Manage" class="li-login">订单管理</router-link>
-                            <router-link to="/Manage" class="li-login">退出登录</router-link>
+                            <span @click="exit()" class="li-login">退出登录</span>
                         </div>
                     </div>
                     <div class="list-wrap" v-else>
-                        <div class="list-login">
-                            <router-link to="/Login" class="li-login select">个人信息</router-link>
-                            <router-link to="/Login" class="li-login">账号设置</router-link>
-                            <router-link to="/Login" class="li-login">订单管理</router-link>
+                        <div class="list-login">    <!--this.$route.path-->
+                            <span @click="toLogin()" class="li-login select">个人信息</span>
+                            <span @click="toLogin()" class="li-login">账号设置</span>
+                            <span @click="toLogin()" class="li-login">订单管理</span>
                         </div>
                     </div>
                 </div>
@@ -101,85 +101,7 @@
             return{
                 type:{id:0,name:'全部'},
                 city:'',
-                otherCitys:[
-                    {
-                        city: '上海'
-                    }, {
-                        city: '北京'
-                    }, {
-                        city: '深圳'
-                    }, {
-                        city: '杭州'
-                    }, {
-                        city: '天津'
-                    }, {
-                        city: '广州'
-                    }, {
-                        city: '成都'
-                    }, {
-                        city: '南京'
-                    }, {
-                        city: '武汉'
-                    }, {
-                        city: '苏州'
-                    }, {
-                        city: '重庆'
-                    }, {
-                        city: '西安'
-                    }, {
-                        city: '宁波'
-                    }, {
-                        city: '青岛'
-                    }, {
-                        city: '长沙'
-                    }, {
-                        city: '郑州'
-                    }, {
-                        city: '贵阳'
-                    }, {
-                        city: '合肥'
-                    }, {
-                        city: '沈阳'
-                    }, {
-                        city: '佛山'
-                    }, {
-                        city: '厦门'
-                    }, {
-                        city: '石家庄'
-                    }, {
-                        city: '济南'
-                    }, {
-                        city: '无锡'
-                    }, {
-                        city: '宜昌'
-                    }, {
-                        city: '大连'
-                    }, {
-                        city: '昆明'
-                    }, {
-                        city: '泉州'
-                    }, {
-                        city: '哈尔滨'
-                    }, {
-                        city: '烟台'
-                    }, {
-                        city: '呼和浩特'
-                    }, {
-                        city: '福州'
-                    }, {
-                        city: '温州'
-                    }, {
-                        city: '长春'
-                    }, {
-                        city: '东莞'
-                    }, {
-                        city: '常州'
-                    }, {
-                        city: '南宁'
-                    }, {
-                        city: '太原'
-                    }
-                ],
+                otherCitys:[],
                 hotCitys:[
                     {name:'全国'},
                     {name:'北京'},
@@ -196,6 +118,11 @@
             }
         },
         mounted(){
+            if(this.$store.state.cityList[0] == null){
+                this.getCity();
+            }else{
+                this.otherCitys = this.$store.state.cityList;
+            }
             this.user = this.$store.state.user;
         },
         methods:{
@@ -204,6 +131,20 @@
             },
             leave(item){
                 document.getElementsByClassName(item)[0].style.display = "none";
+            },
+            getCity(){
+                this.$axios.get("http://118.31.7.87:8080/city/list"
+                ).then(res =>{
+                    // console.log(res);
+                    if(res.data.msg === '成功'){
+                        this.otherCitys = res.data.data;
+                        this.$store.commit('setCityList',res.data.data);
+                    }else{
+                        this.msg="用户名或密码错误";
+                    }
+                }).catch(err =>{
+                    console.log(err);
+                });
             },
             clickFun() {
                 this.$store.commit("changeType",this.type);
@@ -216,6 +157,18 @@
                 this.$store.commit('changeCity',this.city);
                 $(".city-location").html(this.city);
                 $('.select-city').html(this.city);
+            },
+            exit(){
+                this.$store.commit("getUser",this.user);
+                this.user = {};
+            },
+            toLogin(){
+                this.$router.push({
+                    path: `/Login`,
+                    query:{
+                        path:this.$route.path
+                    }
+                })
             }
         }
     }

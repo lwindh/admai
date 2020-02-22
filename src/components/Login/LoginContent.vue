@@ -82,9 +82,16 @@
                         // console.log(res);
                         if(res.data.msg === '成功'){
                             this.$store.commit('getUser',res.data.data);
-                            this.$router.push({
-                                path: `/`
-                            })
+                            if(this.$route.query.path != null){
+                                this.$router.push({
+                                    path: this.$route.query.path
+                                })
+                            }else {
+                                this.$router.push({
+                                    path: `/`
+                                })
+                            }
+
                         }else{
                             l.style.display="block";
                             this.msg="用户名或密码错误";
