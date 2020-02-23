@@ -6,13 +6,13 @@
             </a>
             <div class="location-header" @mouseenter="enter('city-header-wrap')" @mouseleave="leave('city-header-wrap')">
                 <img class="i-icon-location" src="../../assets/Main/position.png" alt="定位">
-                <span class="city-location">全国</span>
+                <span class="city-location">{{this.city.name}}</span>
                 <img class="i-arrow-location" src="../../assets/Main/point.png" alt="箭头">
                 <div class="city-header-wrap">
                     <div class="city-header">
                         <div class="now-city">
                             <span class="title-city">当前城市:</span>
-                            <span class="name-city select-city">全国</span>
+                            <span class="name-city select-city">{{this.city.name}}</span>
                         </div>
                         <div class="hot-city">
                             <span class="title-city">热门城市:</span>
@@ -35,15 +35,15 @@
             </div>
             <div class="right-header">
                 <div class="box-header user-header" @mouseenter="enter('list-wrap')" @mouseleave="leave('list-wrap')">
-                    <router-link to="/Manage" v-if="user.nickName != null">
+                    <a @click="toManage('MyInfo')" v-if="user.nickName != null">
                         <img class="i-box-header i-user" :src="user.avatar">
-                    </router-link>
-                    <router-link to="/Login" v-else>
+                    </a>
+                    <a @click="toLogin()" v-else>
                         <img class="i-box-header i-user" src="../../assets/Main/user.png">
-                    </router-link>
-                    <router-link to="/Manage" v-if="user.nickName != null">
+                    </a>
+                    <a @click="toManage('MyInfo')" v-if="user.nickName != null">
                         <div class="span-box-header name-user show">{{user.nickName}}</div>
-                    </router-link>
+                    </a>
                     <div class="login-user show" v-else>
                         <a @click="toLogin()">
                             <span class="span-box-header span-user">登录</span>
@@ -51,9 +51,9 @@
                     </div>
                     <div class="list-wrap" v-if="user.nickName != null">
                         <div class="list-login">
-                            <router-link to="/Manage" class="li-login select">个人信息</router-link>
-                            <router-link to="/Manage" class="li-login">账号设置</router-link>
-                            <router-link to="/Manage" class="li-login">订单管理</router-link>
+                            <span @click="toManage('MyInfo')" class="li-login select">个人信息</span>
+                            <span @click="toManage('AccountSetting')" class="li-login">账号设置</span>
+                            <span @click="toManage('OrderList')" class="li-login">订单管理</span>
                             <span @click="exit()" class="li-login">退出登录</span>
                         </div>
                     </div>
@@ -99,8 +99,7 @@
         name: "Header",
         data(){
             return{
-                type:{id:0,name:'全部'},
-                city:'',
+                city:{id:0,name:'全国'},
                 otherCitys:[],
                 hotCitys:[
                     {name:'全国'},
@@ -147,16 +146,24 @@
                 });
             },
             clickFun() {
-                this.$store.commit("changeType",this.type);
                 this.$router.push({
                     path: `/Type`,
+                    query:{
+                        city: this.city.name
+                    }
                 })
             },
             clickCity(e) {
-                this.city = e.target.innerHTML;// 是你点击的元素
-                this.$store.commit('changeCity',this.city);
-                $(".city-location").html(this.city);
-                $('.select-city').html(this.city);
+                this.city.name = e.target.innerHTML;// 是你点击的元素
+                if(this.city.name !== '全国'){
+                    const res = this.otherCitys.find((item) => {
+                        if(item.name === this.city.name)
+                            return item.id;
+                    });
+                    this.city.id = res.id;
+                }
+                $(".city-location").html(this.city.name);
+                $('.select-city').html(this.city.name);
             },
             exit(){
                 this.$store.commit("getUser",this.user);
@@ -169,6 +176,19 @@
                         path:this.$route.path
                     }
                 })
+            },
+            //MyInfo AccountSetting OrderList
+            toManage(val){
+                if(this.$route.path === '/MyInfo' || this.$route.path === '/AccountSetting' || this.$route.path === '/OrderList'){
+                    this.$router.push({
+                        path: `/`+val,
+                    });
+                }else{
+                    this.$router.push({
+                        path: `/Manage`,
+                    })
+                }
+                this.$store.commit('setPath',val);
             }
         }
     }

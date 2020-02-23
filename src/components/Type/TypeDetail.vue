@@ -15,7 +15,7 @@
                                 <span class="factor-selected-city">全国</span>
                             </div>
                             <div class="factor-content-main">
-                                <span class="factor-content-item city factor-content-item-active" @click="changeTypeStatus('city',0)">全部</span>
+                                <span class="factor-content-item city factor-content-item-active" @click="changCityStatus('全国',$event)">全国</span>
                                 <div class="factor-content">
                                     <span class="factor-content-item city" @click="changCityStatus(item.name,$event)" v-for="item in city" :key="item.id">{{item.name}}</span>
                                 </div>
@@ -255,19 +255,7 @@
                     {id:3,name:'最近开场'},
                     {id:4,name:'最新上架'},
                 ],
-                city:[
-                    {id:1,name:'上海'},
-                    {id:2,name:'北京'},
-                    {id:3,name:'天津'},
-                    {id:4,name:'成都'},
-                    {id:5,name:'绵阳'},
-                    {id:6,name:'西双版纳'},
-                    {id:7,name:'西藏'},
-                    {id:8,name:'内蒙古'},
-                    {id:9,name:'巴黎'},
-                    {id:10,name:'东京'},
-                    {id:11,name:'北海道'},
-                ],
+                city:[],
                 time:[
                     {id:1,name:'今天'},
                     {id:2,name:'明天'},
@@ -281,11 +269,14 @@
                 }
             }
         },
+        beforeMount(){
+            this.city = this.$store.state.cityList;
+        }
+        ,
         mounted(){
             document.documentElement.scrollTop = 0;
-            this.city = this.$store.state.cityList;
             this.changeTypeStatus('time',0);
-            this.changeTypeStatus('city',0);
+            this.initCityStatus(this.$route.query.city);
             this.changeTypeStatus('type',this.$store.state.type.id);
             this.changeTabStatus('search-sort-item',2);
         },
@@ -326,13 +317,6 @@
                         list[j].className = val+' factor-content-item';
                     }
                 }
-                if(val === 'city'){
-                    if(index === 0){
-                        $('.factor-selected-city').html('全部');
-                    }else {
-                        $('.factor-selected-city').html(this.city[index-1].name);
-                    }
-                }
             },
             changCityStatus(val,e){
                 let list = $('.city');
@@ -341,6 +325,17 @@
                 }
                 e.target.className = 'city factor-content-item factor-content-item-active';
                 $('.factor-selected-city').html(e.target.innerHTML);
+            },
+            initCityStatus(val){
+                let list = document.getElementsByClassName('city');
+                for(let i = 0;i < list.length;i++){
+                    if(list[i].innerHTML === val){
+                        list[i].className = 'city factor-content-item factor-content-item-active';
+                    }else{
+                        list[i].className = 'city factor-content-item';
+                    }
+                }
+                $('.factor-selected-city').html(val);
             },
             changeTabStatus(val,index){
                 let list = $('.'+val);

@@ -7,6 +7,11 @@ import Type from "@/pages/Type";
 import Perform from '@/pages/Perform'
 import FindPassword from "@/pages/FindPassword";
 import Manage from '@/pages/Manage'
+import MyAddress from '@/components/Manage/MyAddress'
+import AccountSetting from '@/components/Manage/AccountSetting'
+import MyInfo from '@/components/Manage/MyInfo'
+import CustomerManage from '@/components/Manage/CustomerManage'
+import OrderList from '@/components/Manage/OrderList'
 
 Vue.use(Router)
 
@@ -49,7 +54,34 @@ export default new Router({
     {
       path: '/Manage',
       name: 'Manage',
-      component: Manage
+      component: Manage,
+      children:[
+          {
+            path: '/OrderList',
+            name: 'OrderList',
+            component: OrderList,
+          },
+          {
+            path: '/MyAddress',
+            name: 'MyAddress',
+            component: MyAddress,
+          },
+          {
+            path: '/AccountSetting',
+            name: 'AccountSetting',
+            component: AccountSetting,
+          },
+          {
+            path: '/MyInfo',
+            name: 'MyInfo',
+            component: MyInfo,
+          },
+          {
+            path: '/CustomerManage',
+            name: 'CustomerManage',
+            component: CustomerManage,
+          },
+      ]
     }
   ]
 })
