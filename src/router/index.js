@@ -7,11 +7,13 @@ import Type from "@/pages/Type";
 import Perform from '@/pages/Perform'
 import FindPassword from "@/pages/FindPassword";
 import Manage from '@/pages/Manage'
+import Add from '@/pages/AddPerform'
 import MyAddress from '@/components/Manage/MyAddress'
 import AccountSetting from '@/components/Manage/AccountSetting'
 import MyInfo from '@/components/Manage/MyInfo'
 import CustomerManage from '@/components/Manage/CustomerManage'
 import OrderList from '@/components/Manage/OrderList'
+
 
 Vue.use(Router)
 
@@ -50,6 +52,11 @@ export default new Router({
       path: '/FindPassword',
       name: 'FindPassword',
       component: FindPassword
+    },
+    {
+      path: '/Add',
+      name: 'Add',
+      component: Add
     },
     {
       path: '/Manage',
