@@ -13,7 +13,8 @@ import AccountSetting from '@/components/Manage/AccountSetting'
 import MyInfo from '@/components/Manage/MyInfo'
 import CustomerManage from '@/components/Manage/CustomerManage'
 import OrderList from '@/components/Manage/OrderList'
-
+import AddShow from '@/components/Admin/AddShow'
+import ChangeShow from '@/components/Admin/ChangeShow'
 
 Vue.use(Router)
 
@@ -57,6 +58,16 @@ export default new Router({
       path: '/Add',
       name: 'Add',
       component: Add
+    },
+    {
+      path: '/AddShow',
+      name: 'AddShow',
+      component: AddShow
+    },
+    {
+      path: '/ChangeShow',
+      name: 'ChangeShow',
+      component: ChangeShow
     },
     {
       path: '/Manage',

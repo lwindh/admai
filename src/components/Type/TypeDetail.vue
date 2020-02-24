@@ -271,8 +271,7 @@
         },
         beforeMount(){
             this.city = this.$store.state.cityList;
-        }
-        ,
+        },
         mounted(){
             document.documentElement.scrollTop = 0;
             this.changeTypeStatus('time',0);

@@ -5,39 +5,45 @@
                 :data="tableData"
                 style="width: 80%;margin: 0 auto;margin-top: 10px;">
             <el-table-column
-                    prop="showItem"
+                    prop="category.name"
+                    label="类别"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="title"
                     label="演出标题"
             >
             </el-table-column>
             <el-table-column
-                    prop="showContent"
-                    label="演出内容"
+                    prop="artist.name"
+                    label="艺术家/团队"
             >
             </el-table-column>
             <el-table-column
-                    prop="city"
+                    prop="city.name"
                     label="演出城市"
             >
             </el-table-column>
             <el-table-column
-                    prop="area"
+                    prop="location.detail"
                     label="演出地点"
             >
             </el-table-column>
             <el-table-column
-                    prop="type"
-                    label="演出类别"
+                    fixed="right"
+                    label="添加"
+                    width="195px"
             >
-            </el-table-column>
-            <el-table-column
-                    prop="sang"
-                    label="演出艺术家"
-            >
-            </el-table-column>
-            <el-table-column
-                    prop="time"
-                    label="演出时间"
-            >
+                <template slot-scope="scope">
+                    <el-button
+                            size="mini"
+                            type="primary"
+                            @click="handleAddTime(scope.row)">添加时间</el-button>
+                    <el-button
+                            size="mini"
+                            type="primary"
+                            @click="handleAddTicket(scope.row)">添加票务</el-button>
+                </template>
             </el-table-column>
             <el-table-column
                     fixed="right"
@@ -46,100 +52,78 @@
                 <template slot-scope="scope">
                     <el-button
                             size="mini"
-                            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                            @click="handleEdit(scope.row)">修改</el-button>
                     <el-button
                             size="mini"
                             type="danger"
-                            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                            @click="handleDelete(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <el-dialog title="添加演出" :visible.sync="dialogFormVisible" style="width: 50%;margin: 0 auto;">
-            <el-form :model="form" :rules="rules">
-                <el-form-item label="演出标题" :label-width="formLabelWidth" style="width: 90%;" prop="showItem">
-                    <el-input v-model="form.showItem"></el-input>
-                </el-form-item>
-                <el-form-item label="演出类别" :label-width="formLabelWidth" style="width: 90%;" prop="type">
-                    <el-select v-model="form.type" placeholder="请选择">
-                        <el-option
-                                v-for="item in type"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="演出内容" :label-width="formLabelWidth" style="width: 90%;" prop="showContent">
-                    <el-input type="textarea" v-model="form.showContent" ></el-input>
-                </el-form-item>
-                <el-form-item label="演出城市" :label-width="formLabelWidth" style="width: 90%;" prop="city">
-                    <el-input v-model="form.city" ></el-input>
-                </el-form-item>
-                <el-form-item label="演出地点" :label-width="formLabelWidth" style="width: 90%;" prop="area">
-                    <el-input v-model="form.area" ></el-input>
-                </el-form-item>
-                <el-form-item label="演出艺术家" :label-width="formLabelWidth" style="width: 90%;" prop="sang">
-                    <el-input v-model="form.sang" ></el-input>
-                </el-form-item>
-                <el-form-item label="演出时间" :label-width="formLabelWidth" style="width: 90%;" prop="time">
+        <el-pagination
+                background
+                @current-change="handleCurrentChange"
+                style="margin-right: 10%;float: right;"
+                layout="total,prev, pager, next"
+                :page-size="30"
+                :total="total">
+        </el-pagination>
+        <el-dialog title="添加时间" :visible.sync="dialogFormVisible" style="width: 60%;margin: 0 auto;">
+            <el-form :model="form" :inline="true" class="demo-ruleForm from">
+                <el-form-item
+                        v-for="(time, index) in form.times"
+                        :label="'演出时间' + index"
+                        :key="time.key"
+                        :prop="'times.' + index + '.value'"
+                        :rules="{required: true, message: '演出时间不能为空', trigger: 'blur'}"
+                >
                     <el-date-picker
-                            v-model="form.time"
-                            align="right"
-                            type="date"
-                            placeholder="选择日期"
-                            size="small"
-                            style="width: 100%;"
-                            :picker-options="pickerOptions">
+                            v-model="time.value"
+                            type="datetime"
+                            style="width: 200px;"
+                            :picker-options="pickerOptions"
+                            value-format="timestamp">
                     </el-date-picker>
+                   <el-button @click.prevent="removeTime(time)">删除</el-button>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="addTime">新增演出时间</el-button>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="handleAdd">确 定</el-button>
+                <el-button type="primary" @click="handleAddTime1">确 定</el-button>
             </div>
         </el-dialog>
-        <el-dialog title="修改演出" :visible.sync="dialogFormVisible1" style="width: 50%;margin: 0 auto;">
-            <el-form :model="formChange" :rules="rules">
-                <el-form-item label="演出标题" :label-width="formLabelWidth" style="width: 90%;" prop="showItem">
-                    <el-input v-model="formChange.showItem"></el-input>
+        <el-dialog title="添加票档" :visible.sync="dialogFormVisible1" style="width: 800px;margin: 0 auto;">
+            <el-form :model="formTicket" :inline="true" class="demo-ruleForm from">
+                <el-form-item
+                        v-for="(ticket, index) in formTicket.tickets"
+                        :label="'票档' + index"
+                        :key="ticket.key"
+                        :prop="'tickets.' + index + '.num'"
+                        :rules="{required: true, message: '票档不能为空', trigger: 'blur'}"
+                >
+                    <el-input type="number" style="width: 260px;" v-model="ticket.num" placeholder="请输入票数">
+                        <template slot="prepend">共</template>
+                        <template slot="append">张票</template>
+                    </el-input>
+                    <el-input type="number" style="width: 260px;" v-model="ticket.money" placeholder="请输入单价">
+                        <template slot="prepend">每张</template>
+                        <template slot="append">元</template>
+                    </el-input>
+                    <el-input type="text" style="width: 260px;" v-model="ticket.description" placeholder="请输入位置">
+                        <template slot="prepend">座位</template>
+                    </el-input>
+                    <el-button @click.prevent="removeTicket(ticket)">删除</el-button>
                 </el-form-item>
-                <el-form-item label="演出类别" :label-width="formLabelWidth" style="width: 90%;" prop="type">
-                    <el-select v-model="formChange.type" placeholder="请选择">
-                        <el-option
-                                v-for="item in type"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="演出内容" :label-width="formLabelWidth" style="width: 90%;" prop="showContent">
-                    <el-input type="textarea" v-model="formChange.showContent" ></el-input>
-                </el-form-item>
-                <el-form-item label="演出城市" :label-width="formLabelWidth" style="width: 90%;" prop="city">
-                    <el-input v-model="formChange.city" ></el-input>
-                </el-form-item>
-                <el-form-item label="演出地点" :label-width="formLabelWidth" style="width: 90%;" prop="area">
-                    <el-input v-model="formChange.area" ></el-input>
-                </el-form-item>
-                <el-form-item label="演出艺术家" :label-width="formLabelWidth" style="width: 90%;" prop="sang">
-                    <el-input v-model="formChange.sang" ></el-input>
-                </el-form-item>
-                <el-form-item label="演出时间" :label-width="formLabelWidth" style="width: 90%;" prop="time">
-                    <el-date-picker
-                            v-model="formChange.time"
-                            align="right"
-                            type="date"
-                            placeholder="选择日期"
-                            size="small"
-                            style="width: 100%;"
-                            :picker-options="pickerOptions">
-                    </el-date-picker>
+                <el-form-item>
+                    <el-button @click="addTicket">新增票档</el-button>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible1 = false">取 消</el-button>
-                <el-button type="primary" @click="handleChange">确 定</el-button>
+                <el-button type="primary" @click="handleAddTicket1">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -150,72 +134,25 @@
         name: "AddPerform",
         data(){
             return{
-                tableData: [{
-                    showItem: '王小虎',
-                    showContent: '111',
-                    city: '北京',
-                    area: '111',
-                    type: '音乐会',
-                    sang: '111',
-                    time:'2020-03-21'
-                },
-                ],
-                type:[
-                    {value:1,label:'音乐会'},
-                    {value:2,label:'话剧歌剧'},
-                    {value:3,label:'展览休闲'},
-                    {value:4,label:'演唱会'},
-                    {value:5,label:'曲苑杂坛'},
-                    {value:6,label:'舞蹈芭蕾'},
-                    {value:7,label:'体育'},
-                    {value:8,label:'儿童亲子'},
-                    {value:9,label:'旅游展览'},
-                    {value:10,label:'二次元'},
-                ],
+                tableData: [],
+                search: '',
+                total:1,
                 form:{
-                    showItem: '',
-                    showContent: '',
-                    city: '',
-                    area: '',
-                    type: '',
-                    sang: '',
-                    time:''
+                    times: [{
+                        value: ''
+                    }],
                 },
-                formChange:{
-                    showItem: '',
-                    showContent: '',
-                    city: '',
-                    area: '',
-                    type: '',
-                    sang: '',
-                    time:''
+                formTicket:{
+                    tickets: [{
+                        num: '',
+                        money:'',
+                        description:''
+                    }],
                 },
-                formLabelWidth:'110px',
-                dialogFormVisible: false,
-                dialogFormVisible1: false,
-                rules: {
-                    showItem: [
-                        {required: true, message: '请输入收件人', trigger: 'blur'}
-                    ],
-                    showContent:[
-                        {required: true, message: '请输入演出内容', trigger: 'blur'},
-                    ],
-                    city:[
-                        {required: true, message: '请输入城市', trigger: 'blur'}
-                    ],
-                    area: [
-                        {required: true, message: '请输入地址', trigger: 'change'}
-                    ],
-                    type:[
-                        {required: true, message: '请选择演出类型', trigger: 'change'},
-                    ],
-                    sang:[
-                        {required: true, message: '请输入演出艺术家', trigger: 'blur'}
-                    ],
-                    time:[
-                        {required: true, message: '请选择时间', trigger: 'change'}
-                    ]
-                },
+                performId:'',
+                dialogFormVisible:false,
+                dialogFormVisible1:false,
+                formLabelWidth:'80px',
                 pickerOptions: {
                     disabledDate(time) {
                         return time.getTime() < Date.now() - 8.64e7;
@@ -223,16 +160,17 @@
                 }
             }
         },
+        mounted(){
+            this.getShowList(1);
+        },
         methods: {
-            handleEdit(index, row) {
-                this.dialogFormVisible1 = true;
-                this.formChange.showItem = row.showItem;
-                this.formChange.showContent = row.showContent;
-                this.formChange.city = row.city;
-                this.formChange.area = row.area;
-                this.formChange.type = row.type;
-                this.formChange.sang = row.sang;
-                this.formChange.time = row.time;
+            handleEdit(row) {
+                this.$router.push({
+                    path: `/ChangeShow`,
+                    query:{
+                        uid:row.id
+                    }
+                });
             },
             handleDelete(index, row) {
                 console.log(row,index);
@@ -269,54 +207,123 @@
                     });
                 });
             },
-            handleAdd(){
-                this.dialogFormVisible = false;
-                this.$axios.post(""
-                ).then(res =>{
-                    if(res.data.status === 'success'){
+            handleAddTime(row){
+                this.performId = row.id;
+                this.dialogFormVisible = true;
+            },
+            handleAddTime1(){
+                let data = [];
+                this.form.times.forEach((value)=>{
+                    let a = {"performId": this.performId,"time":value.value};
+                    data.push(a);
+                });
+                this.$axios({
+                    method:"post",
+                    url:"http://118.31.7.87:8080/time/add",
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    data:JSON.stringify(data)
+                }).then(res =>{
+                    if(res.data.msg === "新增成功"){
+                        this.dialogFormVisible = false;
                         this.$message({
                             type: 'success',
-                            message: '添加成功!'
-                        });
-                        this.$axios.post("")
-                            .then(res =>{
-                                this.tableData = res.data.data.list;
-                            }).catch(err =>{
-                            console.log(err);
+                            message: '添加时间成功!'
                         });
                     }else{
-                        this.$message.error('添加失败!');
+                        this.$message.error('添加时间失败!');
+                    }
+                }).catch(err =>{
+                    console.log(err);
+                });
+            },
+            handleAddTicket(row){
+                this.performId = row.id;
+                this.dialogFormVisible1 = true;
+            },
+            handleAddTicket1(){
+                console.log(this.formTicket.tickets);
+                let data = [];
+                this.formTicket.tickets.forEach((value)=>{
+                    let a = {
+                        "performId": this.performId,
+                        "count": value.num,
+                        "description": value.description,
+                        "money": value.money
+                    };
+                    data.push(a);
+                });
+
+                this.$axios({
+                    method:"post",
+                    url:"http://118.31.7.87:8080/ticket/add",
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    data:JSON.stringify(data)
+                }).then(res =>{
+                    console.log(res.data);
+                    if(res.data.msg === "新增成功"){
+                        this.dialogFormVisible1 = false;
+                        this.$message({
+                            type: 'success',
+                            message: '添加票档成功!'
+                        });
+                    }else{
+                        this.$message.error('添加票档失败!');
                     }
                 }).catch(err =>{
                     console.log(err);
                 });
             },
             addItem(){
-                this.dialogFormVisible = true;
+                this.$router.push({
+                    path: `/AddShow`
+                });
             },
-            handleChange(){
-                this.dialogFormVisible1 = false;
-                this.$axios.post(""
+            getShowList(val){
+                this.$axios.post("http://118.31.7.87:8080/perform/all/"+val
                 ).then(res =>{
-                    if(res.data.status === 'success'){
-                        this.$message({
-                            type: 'success',
-                            message: '添加成功!'
-                        });
-                        this.$axios.post("")
-                            .then(res =>{
-                                this.tableData = res.data.data.list;
-                            }).catch(err =>{
-                            console.log(err);
-                        });
+                    if(res.data.msg === '成功'){
+                        this.tableData = res.data.data.data;
+                        this.total = parseInt(res.data.data.total);
                     }else{
-                        this.$message.error('添加失败!');
+                        this.$message.error('获取失败!');
                     }
                 }).catch(err =>{
                     console.log(err);
                 });
             },
-
+            handleCurrentChange(val) {
+                this.getShowList(val);
+            },
+            removeTime(item) {
+                var index = this.form.times.indexOf(item);
+                if (index !== -1) {
+                    this.form.times.splice(index, 1)
+                }
+            },
+            addTime() {
+                this.form.times.push({
+                    value: '',
+                    key: Date.now()
+                });
+            },
+            removeTicket(item) {
+                var index = this.form.tickets.indexOf(item);
+                if (index !== -1) {
+                    this.formTicket.tickets.splice(index, 1)
+                }
+            },
+            addTicket() {
+                this.formTicket.tickets.push({
+                    num: '',
+                    money:'',
+                    description:'',
+                    key: Date.now()
+                });
+            },
         },
     }
 </script>

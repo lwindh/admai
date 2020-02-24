@@ -27,6 +27,9 @@ const mutations = {
     setPath:(state,params)=>{
         state.path = params;
     },
+    changeUserName:(state,params)=>{
+        state.user.nickName = params;
+    }
 }
 
 const actions = {
@@ -41,6 +44,9 @@ const actions = {
     },
     setPath:({commit}) => {
         commit('setPath')
+    },
+    changeUserName:({commit}) => {
+        commit('changeUserName')
     }
 }
 
