@@ -5,7 +5,7 @@
                 :data="tableData"
                 style="width: 80%;margin: 0 auto;margin-top: 10px;">
             <el-table-column
-                    prop="user"
+                    prop="name"
                     label="收件人"
             >
             </el-table-column>
@@ -15,7 +15,7 @@
             >
             </el-table-column>
             <el-table-column
-                    prop="address"
+                    prop="location"
                     label="配送地址"
             >
             </el-table-column>
@@ -74,6 +74,9 @@
 <script>
     export default {
         name: "MyAddress",
+        mounted(){
+            this.getAll();
+        },
         data(){
             let validatePhone = (rule, value, callback) => {
                 var reg=/^1[3456789]\d{9}$/;
@@ -84,12 +87,7 @@
                 }
             };
             return{
-                tableData: [{
-                    user: '王小虎',
-                    phone: '18012347895',
-                    address: '天津市静海区',
-                },
-                ],
+                tableData: [],
                 form:{
                     user: '',
                     phone: '',
@@ -100,6 +98,7 @@
                     phone: '',
                     address: '',
                 },
+                id:'',
                 formLabelWidth:'110px',
                 dialogFormVisible: false,
                 dialogFormVisible1: false,
@@ -112,7 +111,7 @@
                         { validator: validatePhone, trigger: 'blur'}
                     ],
                     address:[
-                        {required: true, message: '请选择收货地址', trigger: 'blur'}
+                        {required: true, message: '请输入收货地址', trigger: 'blur'}
                     ]
                 }
             }
@@ -120,9 +119,10 @@
         methods: {
             handleEdit(index, row) {
                 this.dialogFormVisible1 = true;
-                this.formChange.user = row.user;
+                this.formChange.user = row.name;
                 this.formChange.phone = row.phone;
-                this.formChange.address = row.address;
+                this.formChange.address = row.location;
+                this.id = row.id;
             },
             handleDelete(index, row) {
                 console.log(row,index);
@@ -131,22 +131,17 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post("")
+                    this.$axios.post("http://118.31.7.87:8080/ship/delete/"+row.id)
                         .then(res =>{
-                            if(res.data.status === 'success'){
+                            console.log(res.data);
+                            if(res.data.msg === "删除成功"){
                                 this.$message({
                                     type: 'success',
                                     message: '删除成功!'
                                 });
-                                this.$axios.post("")
-                                    .then(res =>{
-                                        this.tableData = res.data.data.list;
-                                        this.totalPage=res.data.data.total;
-                                    }).catch(err =>{
-                                    console.log(err);
-                                });
+                                this.getAll();
                             }else{
-                                this.$message.error('删除失败!');
+                                this.$message.error(res.data.msg);
                             }
                         }).catch(err =>{
                         console.log(err);
@@ -161,21 +156,24 @@
             },
             handleAdd(){
                 this.dialogFormVisible = false;
-                this.$axios.post(""
-                ).then(res =>{
-                    if(res.data.status === 'success'){
+                this.$axios({
+                    method: 'post',
+                    url: "http://118.31.7.87:8080/ship/save",
+                    data: {
+                        "location": this.form.address,
+                        "name": this.form.user,
+                        "phone": this.form.phone,
+                        "uid": this.$store.state.user.id
+                    }
+                }).then(res =>{
+                    if(res.data.msg === "保存成功"){
                         this.$message({
                             type: 'success',
                             message: '添加成功!'
                         });
-                        this.$axios.post("")
-                            .then(res =>{
-                                this.tableData = res.data.data.list;
-                            }).catch(err =>{
-                            console.log(err);
-                        });
+                        this.getAll();
                     }else{
-                        this.$message.error('添加失败!');
+                        this.$message.error(res.data.msg);
                     }
                 }).catch(err =>{
                     console.log(err);
@@ -186,27 +184,44 @@
             },
             handleChange(){
                 this.dialogFormVisible1 = false;
-                this.$axios.post(""
-                ).then(res =>{
-                    if(res.data.status === 'success'){
+                this.$axios({
+                    method: 'post',
+                    url: "http://118.31.7.87:8080/ship/update",
+                    data: {
+                        "location": this.formChange.address,
+                        "name": this.formChange.user,
+                        "phone": this.formChange.phone,
+                        "id": this.id
+                    }
+                }).then(res =>{
+                    console.log(res.data);
+                    if(res.data.msg === "更新成功"){
                         this.$message({
                             type: 'success',
-                            message: '添加成功!'
+                            message: '修改成功!'
                         });
-                        this.$axios.post("")
-                            .then(res =>{
-                                this.tableData = res.data.data.list;
-                            }).catch(err =>{
-                            console.log(err);
-                        });
+                        this.getAll();
                     }else{
-                        this.$message.error('添加失败!');
+                        this.$message.error(res.data.msg);
                     }
                 }).catch(err =>{
                     console.log(err);
                 });
             },
-
+            getAll() {
+                this.$axios({
+                    method: 'post',
+                    url: "http://118.31.7.87:8080/ship/list/"+this.$store.state.user.id
+                }).then(res =>{
+                    if(res.data.msg === '成功'){
+                        this.tableData = res.data.data;
+                    }else{
+                        this.$message.error(res.data.msg);
+                    }
+                }).catch(err =>{
+                    console.log(err);
+                });
+            }
         },
     }
 </script>

@@ -2,10 +2,6 @@
     margin-bottom: 64px;
 }
 .flex {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
     display: flex;
 }
 .perform .box {
@@ -36,8 +32,6 @@
     width: 12px;
     height: 12px;
     background-repeat: no-repeat;
-    -webkit-background-size: 12px 12px;
-    -moz-background-size: 12px 12px;
     background-size: 12px 12px;
 }
 .right-content .service-note-desc {
@@ -49,18 +43,12 @@
     background-image: url(../assets/perform/p2.png);
 }
 .content-right {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 320px;
     border-left: 1px solid #ebebeb;
     padding: 40px 18px 0;
 }
 .flex1 {
-    -webkit-box-flex: 1;
-    -webkit-flex: 1;
-    -moz-box-flex: 1;
-    -ms-flex: 1;
     flex: 1;
 }
 .perform .hd {
@@ -93,21 +81,12 @@
     top: -3px;
     text-align: center;
     line-height: 24px;
-    background: -webkit-linear-gradient(135deg,#ff1268,#ff5593);
-    background: -moz-linear-gradient(135deg,#ff1268 0,#ff5593 100%);
-    background: -o-linear-gradient(135deg,#ff1268 0,#ff5593 100%);
     background: linear-gradient(-45deg,#ff1268,#ff5593);
     z-index: 9999;
     font-size: 14px;
     color: #fff;
-    -webkit-border-bottom-right-radius: 10px;
-    -moz-border-radius-bottomright: 10px;
     border-bottom-right-radius: 10px;
-    -webkit-border-top-left-radius: 3px;
-    -moz-border-radius-topleft: 3px;
     border-top-left-radius: 3px;
-    -webkit-border-top-right-radius: 3px;
-    -moz-border-radius-topright: 3px;
     border-top-right-radius: 3px;
 }
 .address {
@@ -141,17 +120,12 @@
     padding: 0 7px;
     color: #ff1268;
     background: #ffe7ef;
-    -webkit-border-radius: 0 100px 100px 0;
-    -moz-border-radius: 0 100px 100px 0;
     border-radius: 0 100px 100px 0;
     margin-bottom: 10px;
     font-size: 14px;
 }
 .perform-notice-prefix span {
     vertical-align: middle;
-}
-.perform-notice .hastitle {
-    -webkit-line-clamp: 2;
 }
 .perform-notice-content-detail {
     color: #999;
@@ -177,28 +151,17 @@
     color: #000;
     width: 78px;
     height: 40px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 1px solid #eee;
     text-align: center;
     overflow: hidden;
-    -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
     white-space: nowrap;
     display: -webkit-inline-flex;
     display: -moz-inline-box;
     display: -ms-inline-flexbox;
     display: inline-flex;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -moz-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    -moz-box-pack: center;
-    -ms-flex-pack: center;
     justify-content: center;
     margin-right: 6px;
     margin-bottom: 8px;
@@ -226,10 +189,6 @@
     margin-top: 0;
 }
 .perform .order .perform__order__select {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
     display: flex;
     margin-top: 28px;
 }
@@ -243,10 +202,6 @@
     display: inline-block;
     vertical-align: top;
     margin-left: 15px;
-    -webkit-box-flex: 1;
-    -webkit-flex: 1;
-    -moz-box-flex: 1;
-    -ms-flex: 1;
     flex: 1;
 }
 .perform .order .perform__order__select .select_right .select_right_list .active {
@@ -256,17 +211,7 @@
     outline-color: #ffeaf1;
 }
 .perform .order .perform__order__select .select_right .select_right_list .select_right_list_item {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-    -moz-box-orient: vertical;
-    -moz-box-direction: normal;
-    -ms-flex-direction: column;
     flex-direction: column;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    -moz-box-pack: center;
-    -ms-flex-pack: center;
     justify-content: center;
     display: -webkit-box;
     display: -webkit-flex;
@@ -530,4 +475,9 @@ li, ul {
     font-size: 16px;
     color: #4a4a4a;
 }
-
+.times{
+    width: 130px;
+}
+.sku_item{
+    width: 120px;
+}

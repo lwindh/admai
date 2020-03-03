@@ -135,6 +135,7 @@
         data(){
             return{
                 tableData: [],
+                nowPage:1,
                 search: '',
                 total:1,
                 form:{
@@ -172,29 +173,35 @@
                     }
                 });
             },
-            handleDelete(index, row) {
-                console.log(row,index);
+            handleDelete(row) {
+                console.log(row);
                 this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post("")
+                    this.$axios.post("http://118.31.7.87:8080/perform/delete/"+row.id)
                         .then(res =>{
-                            if(res.data.status === 'success'){
+                            if(res.data.msg === '删除成功'){
                                 this.$message({
                                     type: 'success',
                                     message: '删除成功!'
                                 });
-                                this.$axios.post("")
+                                this.getShowList(this.nowPage);
+                                this.$axios.post("http://118.31.7.87:8080/time/delete/"+row.id)
                                     .then(res =>{
-                                        this.tableData = res.data.data.list;
-                                        this.totalPage=res.data.data.total;
+                                        console.log(res.data);
+                                        this.$axios.post("http://118.31.7.87:8080/ticket/delete/"+row.id)
+                                            .then(res =>{
+                                                console.log(res.data);
+                                            }).catch(err =>{
+                                            console.log(err);
+                                        });
                                     }).catch(err =>{
                                     console.log(err);
                                 });
                             }else{
-                                this.$message.error('删除失败!');
+                                this.$message.error(res.data.msg);
                             }
                         }).catch(err =>{
                         console.log(err);
@@ -283,8 +290,15 @@
                 });
             },
             getShowList(val){
-                this.$axios.post("http://118.31.7.87:8080/perform/all/"+val
-                ).then(res =>{
+                this.$axios({
+                    method:"post",
+                    url:"http://118.31.7.87:8080/perform/"+val,
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    data:{
+                    }
+                }).then(res =>{
                     if(res.data.msg === '成功'){
                         this.tableData = res.data.data.data;
                         this.total = parseInt(res.data.data.total);
@@ -296,6 +310,7 @@
                 });
             },
             handleCurrentChange(val) {
+                this.nowPage = val;
                 this.getShowList(val);
             },
             removeTime(item) {
@@ -311,7 +326,7 @@
                 });
             },
             removeTicket(item) {
-                var index = this.form.tickets.indexOf(item);
+                var index = this.formTicket.tickets.indexOf(item);
                 if (index !== -1) {
                     this.formTicket.tickets.splice(index, 1)
                 }
@@ -325,5 +340,23 @@
                 });
             },
         },
+        created () {
+            // 在页面加载时读取sessionStorage里的状态信息
+            if (sessionStorage.getItem('store')) {
+                this.$store.replaceState(
+                    Object.assign(
+                        {},
+                        this.$store.state,
+                        JSON.parse(sessionStorage.getItem('store'))
+                    )
+                )
+            }
+
+            // 在页面刷新时将vuex里的信息保存到sessionStorage里
+            // beforeunload事件在页面刷新时先触发
+            window.addEventListener('beforeunload', () => {
+                sessionStorage.setItem('store', JSON.stringify(this.$store.state))
+            })
+        }
     }
 </script>

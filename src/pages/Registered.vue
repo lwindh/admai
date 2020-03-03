@@ -22,7 +22,7 @@
                                     <CheckedImg @patch="getStatus"/>
                                 </el-form-item>
                                 <el-form-item prop="check">
-                                    <el-checkbox @change="checkedChange" v-model="checked" name="zc" autocomplete="off">我已阅读并同意 <a href="https://sale.damai.cn/contents/4677/13574.html">《会员协议》</a>和
+                                    <el-checkbox @change="checkedChange" checked v-model="checked" name="zc" autocomplete="off">我已阅读并同意 <a href="https://sale.damai.cn/contents/4677/13574.html">《会员协议》</a>和
                                         <a href="https://sale.damai.cn/contents/4677/13572.html">《隐私权条款》</a></el-checkbox>
                                 </el-form-item>
                                 <el-form-item>
@@ -40,6 +40,7 @@
 <script>
     import LoginHeader from "@/components/Login/LoginHeader";
     import CheckedImg from "@/components/Register/CheckedImg";
+    import '@/style/Order.css'
     export default {
         name: "Registered",
         components:{
@@ -103,7 +104,7 @@
                     check1:0
                 },
                 status:false,
-                checked: false,
+                checked: true,
                 rules: {
                     username:[
                         { required: true, message: '请输入手机号', trigger: 'blur'},
@@ -153,15 +154,9 @@
                                     // console.log(res);
                                     if(res1.data.msg === '成功'){
                                         this.$store.commit('getUser',res1.data.data);
-                                        if(this.$route.query.path != null){
-                                            this.$router.push({
-                                                path: this.$route.query.path
-                                            })
-                                        }else {
-                                            this.$router.push({
-                                                path: `/`
-                                            })
-                                        }
+                                        this.$router.push({
+                                            path: `/`
+                                        })
                                     }
                                 }).catch(err =>{
                                     console.log(err);
@@ -172,7 +167,6 @@
                         }).catch(err =>{
                             console.log(err);
                         });
-                        alert('submit!');
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -186,7 +180,6 @@
             checkPhone(){
                 this.$axios.get("http://118.31.7.87:8080/user/register/phone?phoneNumber="+this.form.username
                 ).then(res =>{
-                    console.log(res);
                     if(res.data.msg === '手机号未注册'){
                         this.status = false;
                     }else{

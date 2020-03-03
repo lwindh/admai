@@ -4,33 +4,51 @@
                 :data="tableData"
                 style="width: 80%;margin: 0 auto;margin-top: 10px;">
             <el-table-column
-                    prop="order"
                     label="订单信息"
                     >
+                <!--<template slot-scope="scope">
+                    <el-popover trigger="hover" placement="top">
+                        <div>
+                            <div>
+                                {{orderItem.title}}
+                            </div>
+                            <div>
+                                <span>时间:{{new Date(scope.row.time).toLocaleString()}}</span>
+                            </div>
+                            <div>
+                                地点:{{orderItem.location.detail}}
+                            </div>
+                        </div>
+                        <div slot="reference" class="name-wrapper">
+                            <el-tag size="medium">{{orderItem.title }}</el-tag>
+                        </div>
+                    </el-popover>
+                </template>-->
             </el-table-column>
             <el-table-column
-                    prop="price"
                     label="单价"
                     >
             </el-table-column>
             <el-table-column
-                    prop="num"
+                    prop="count"
                     label="数量"
                     >
             </el-table-column>
 
             <el-table-column
-                    prop="total"
+                    prop="money"
                     label="小计"
                     >
             </el-table-column>
             <el-table-column
-                    prop="date"
                     label="日期"
-                    >
+                    width="160px">
+                <template slot-scope="scope">
+                    <el-tag>{{new Date(scope.row.createTime).toLocaleString()}}</el-tag>
+                </template>
             </el-table-column>
             <el-table-column
-                    prop="status"
+                    prop="state"
                     label="状态"
                     >
             </el-table-column>
@@ -44,29 +62,62 @@
                 </template>
             </el-table-column>
         </el-table>
+        <el-pagination
+                @current-change="handleCurrentChange"
+                background
+                layout="prev, pager, next"
+                :page-size="10"
+                style="float: right;margin-right: 10%;"
+                :total="total">
+        </el-pagination>
     </div>
 </template>
 
 <script>
     export default {
         name: "OrderList",
+        mounted(){
+            this.getOrderList(1);
+        },
         data(){
             return{
-                tableData: [{
-                    order: '王小虎',
-                    price: 180,
-                    num: 2,
-                    total: 360,
-                    status: '已支付',
-                    date: '2016-05-02',
-                },
-                ],
+                tableData: [],
+                total:10,
+                orderItem:[],
             }
         },
         methods: {
             handleClick(row) {
                 console.log(row);
-            }
+            },
+            getOrderList(val){
+                this.$axios({
+                    method: 'get',
+                    url: "http://118.31.7.87:8080/order/user?userId="+this.$store.state.user.id+"&pageNum="+val,
+                }).then(res =>{
+                    this.tableData = res.data.data.data;
+                    this.total = parseInt(res.data.data.total);
+                }).catch(err =>{
+                    console.log(err);
+                });
+            },
+            handleCurrentChange(val) {
+                this.getOrderList(val);
+            },
+            getItem(){
+                this.$axios({
+                    method: 'post',
+                    url: "http://118.31.7.87:8080/perform/detail/"+this.tableData.performId,
+                }).then(res =>{
+                    if(res.data.msg === "成功"){
+                        this.orderItem = res.data.data;
+                    }else{
+                        this.$message.error(res.data.msg);
+                    }
+                }).catch(err =>{
+                    console.log(err);
+                });
+            },
         },
     }
 </script>

@@ -6,8 +6,8 @@
             <el-form-item label="演出标题" style="width: 70%;" prop="title">
                 <el-input v-model="form.title"></el-input>
             </el-form-item>
-            <el-form-item label="艺术家/团队" prop="art">
-                <el-select v-model="form.art" filterable placeholder="请选择艺术家/团队">
+            <el-form-item label="艺术家/团队">
+                <el-select v-model="form.art" @change="checkAddArtist" filterable allow-create default-first-option placeholder="请选择艺术家/团队">
                     <el-option
                             v-for="item in artists"
                             :key="item.id"
@@ -17,7 +17,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="演出城市" prop="city">
-                <el-select @change="getPosition" v-model="form.city" filterable placeholder="请选择城市">
+                <el-select @change="getPosition" v-model="form.city" allow-create filterable default-first-option placeholder="请选择城市">
                     <el-option
                             v-for="item in options"
                             :key="item.id"
@@ -25,7 +25,7 @@
                             :value="item.id">
                     </el-option>
                 </el-select>
-                <el-select v-model="form.position" filterable placeholder="请选择城市地点">
+                <el-select v-model="form.position" @change="checkAddPosition" allow-create filterable default-first-option placeholder="请选择城市地点">
                     <el-option
                             v-for="item in position"
                             :key="item.id"
@@ -131,9 +131,6 @@
                     desc: [
                         { required: true, message: '请输入演出介绍', trigger: 'blur' }
                     ],
-                    art: [
-                        { required: true, message: '请选择艺术家', trigger: 'change' }
-                    ],
                     viewNotice: [
                         { required: true, message: '请输入观影须知', trigger: 'blur' }
                     ],
@@ -152,6 +149,30 @@
             onSubmit(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        if(typeof(this.form.art) === "string"){
+                            this.artists.find((item) => {
+                                if(item.name === this.form.art){
+                                    this.form.art = item.id;
+                                    return item.id;
+                                }
+                            });
+                        }
+                        if(isNaN(parseInt(this.form.city))){
+                            this.options.find((item) => {
+                                if(item.name === this.form.city){
+                                    this.form.city = item.id;
+                                    return item.id;
+                                }
+                            });
+                        }
+                        if(isNaN(parseInt(this.form.position))){
+                            this.position.find((item) => {
+                                if(item.detail === this.form.position){
+                                    this.form.position = item.id;
+                                    return item.id;
+                                }
+                            });
+                        }
                         this.$axios({
                             method:"post",
                             url:"http://118.31.7.87:8080/perform/add",
@@ -171,7 +192,7 @@
                                 "viewNotice": this.form.viewNotice
                             }
                         }).then(res =>{
-                            if(res.data.msg === "成功"){
+                            if(res.data.code === 200){
                                 this.$message({
                                     type: 'success',
                                     message: '添加成功!'
@@ -228,7 +249,7 @@
                     console.log(err);
                 });
             },
-            getPosition(){
+            getP(){
                 this.$axios.get("http://118.31.7.87:8080/location/all?id="+this.form.city
                 ).then(res =>{
                     // console.log(res);
@@ -240,6 +261,10 @@
                 }).catch(err =>{
                     console.log(err);
                 });
+            },
+            getPosition(){
+                this.checkAddCity();
+                this.getP();
             },
             getArt(){
                 this.$axios.get("http://118.31.7.87:8080/artist/all"
@@ -269,6 +294,58 @@
                     path: `/Add`
                 });
             },
+            checkAddArtist(){
+                if(typeof(this.form.art) === "string"){
+                    this.$axios.post("http://118.31.7.87:8080/artist/add/"+this.form.art
+                    ).then(res =>{
+                        // console.log(res);
+                        if(res.data.msg === '新增成功'){
+                            this.getArt();
+                        }
+                    }).catch(err =>{
+                        console.log(err);
+                    });
+                }
+            },
+            checkAddCity(){
+                if(isNaN(parseInt(this.form.city))){
+                    this.$axios.post("http://118.31.7.87:8080/city/add/"+this.form.city
+                    ).then(res =>{
+                        if(res.data.msg === '新增成功'){
+                            this.getCity();
+                        }
+                    }).catch(err =>{
+                        console.log(err);
+                    });
+                }
+            },
+            checkAddPosition(){
+                if(isNaN(parseInt(this.form.position))){
+                    let a = {
+                        id:'',
+                        name:''
+                    };
+                    if(isNaN(parseInt(this.form.city))){
+                        a = this.options.find((item) => {
+                            if(item.name === this.form.city){
+                                return item.id;
+                            }
+                        });
+                    }else {
+                        a.id = this.form.city;
+                    }
+                    this.$axios.post("http://118.31.7.87:8080/location/add/"+a.id+"/"+this.form.position
+                    ).then(res =>{
+                        // console.log(res);
+                        if(res.data.msg === '新增成功'){
+                            this.getP();
+                        }
+                    }).catch(err =>{
+                        console.log(err);
+                    });
+                }
+            },
+
         }
     }
 </script>

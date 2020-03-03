@@ -3,7 +3,7 @@
         <div id="header">
             <div class="header-layout">
                 <h1 class="logo">
-                    <a href="/">大麦</a>
+                    <router-link to="/">大麦</router-link>
                 </h1>
                 <h2 class="logo-title"> 找回密码 </h2>
                 <ul class="header-nav">
@@ -20,13 +20,21 @@
                         <div class="maincenter-box-tip">
                             <p class="ui-tiptext ui-tiptext-message ft-14">
                                 <i class="ui-tiptext-icon iconfont el-icon-warning" title=" 提示 "></i>
-                                请输入你需要找回登录密码的账户名
+                                请输入你需要找回登录密码的手机号
                             </p>
                         </div>
                         <el-form status-icon :rules="rules" class="ui-form ui-form-item" ref="form" :model="form" label-width="80px">
                             <el-form-item label="登录名:" prop="phone">
-                                <el-input v-model="form.phone" placeholder="手机号或邮箱"></el-input>
+                                <el-input v-model="form.phone" placeholder="手机号"></el-input>
                             </el-form-item>
+                            <el-form-item label="输入密码" prop="password">
+                                <el-tooltip class="item" effect="dark" content="6-20个字符" placement="right">
+                                    <el-input type="password" v-model="form.password" placeholder="输入密码" autocomplete="off"></el-input>
+                                </el-tooltip>
+                            </el-form-item>
+                            <el-form-item label="确认密码" prop="checkPassword">
+                                <el-input type="password" v-model="form.checkPassword" placeholder="再次输入密码" autocomplete="off"></el-input>
+                            </el-form-item >
                             <el-form-item label="验证:" prop="check">
                                 <CheckedImg @patch="getStatus"/>
                             </el-form-item>
@@ -50,6 +58,28 @@
             CheckedImg
         },
         data(){
+            let validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else if(value.length<6 || value.length>20){
+                    callback(new Error('密码格式不正确'));
+                }
+                else {
+                    if (this.form.checkPassword !== '') {
+                        this.$refs.form.validateField('checkPassword');
+                    }
+                    callback();
+                }
+            };
+            let validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.form.password) {
+                    callback(new Error('密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
             let validateChecked1 = (rule, value, callback) => {
                 if (value === 0) {
                     callback(new Error('滑动验证不通过'));
@@ -69,7 +99,9 @@
             return{
                 form:{
                     phone:'',
-                    check:0
+                    check:0,
+                    password:'',
+                    checkPassword:''
                 },
                 rules: {
                     phone:[
@@ -78,7 +110,13 @@
                     ],
                     check:[
                         {validator: validateChecked1, trigger: 'change'}
-                    ]
+                    ],
+                    password: [
+                        { validator: validatePass, required: true, trigger: 'blur' }
+                    ],
+                    checkPassword: [
+                        { validator: validatePass2, required: true, trigger: 'blur' }
+                    ],
                 }
             }
         },
@@ -90,7 +128,21 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid && this.form.check !== 0) {
-                        alert('submit!');
+                                this.$axios({
+                                    method:"post",
+                                    url:"http://118.31.7.87:8080/user/pwd/find?phone="+this.phone+"&pwd="+this.password,
+                                }).then(res =>{
+                                    if(res.data.msg === "成功"){
+                                        this.$message.error('修改密码成功!');
+                                        this.$router.push({
+                                            path: '/Login'
+                                        })
+                                    }else{
+                                        this.$message.error('注册失败!');
+                                    }
+                                }).catch(err =>{
+                                    console.log(err);
+                                });
                     } else {
                         console.log('error submit!!');
                         return false;

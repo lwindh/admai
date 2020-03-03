@@ -23,7 +23,6 @@
                     <el-menu-item index="MyAddress">收货地址</el-menu-item>
                     <el-menu-item index="AccountSetting">账号设置</el-menu-item>
                     <el-menu-item index="MyInfo">个人信息</el-menu-item>
-                    <el-menu-item index="CustomerManage">常用购票人</el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
         </el-menu>

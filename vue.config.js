@@ -1,4 +1,5 @@
 module.exports = {
+    /*publicPath:'./', //静态资源找不到*/
     runtimeCompiler:true,
     devServer: {
         open: false, //是否自动弹出浏览器页面

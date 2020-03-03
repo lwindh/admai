@@ -11,10 +11,11 @@ import Add from '@/pages/AddPerform'
 import MyAddress from '@/components/Manage/MyAddress'
 import AccountSetting from '@/components/Manage/AccountSetting'
 import MyInfo from '@/components/Manage/MyInfo'
-import CustomerManage from '@/components/Manage/CustomerManage'
 import OrderList from '@/components/Manage/OrderList'
 import AddShow from '@/components/Admin/AddShow'
 import ChangeShow from '@/components/Admin/ChangeShow'
+import Order from '@/pages/Order'
+import PayOrder from '@/pages/PayOrder'
 
 Vue.use(Router)
 
@@ -55,23 +56,51 @@ export default new Router({
       component: FindPassword
     },
     {
+      path: '/Order',
+      name: 'Order',
+      meta: {
+        requireAuth: true // 配置此条，进入页面前判断是否需要登陆
+      },
+      component: Order
+    },
+    {
+      path: '/PayOrder',
+      name: 'PayOrder',
+      meta: {
+        requireAuth: true
+      },
+      component: PayOrder
+    },
+    {
       path: '/Add',
       name: 'Add',
+      meta: {
+        requireAuth: true
+      },
       component: Add
     },
     {
       path: '/AddShow',
       name: 'AddShow',
+      meta: {
+        requireAuth: true
+      },
       component: AddShow
     },
     {
       path: '/ChangeShow',
       name: 'ChangeShow',
+      meta: {
+        requireAuth: true
+      },
       component: ChangeShow
     },
     {
       path: '/Manage',
       name: 'Manage',
+      meta: {
+        requireAuth: true
+      },
       component: Manage,
       children:[
           {
@@ -93,12 +122,7 @@ export default new Router({
             path: '/MyInfo',
             name: 'MyInfo',
             component: MyInfo,
-          },
-          {
-            path: '/CustomerManage',
-            name: 'CustomerManage',
-            component: CustomerManage,
-          },
+          }
       ]
     }
   ]

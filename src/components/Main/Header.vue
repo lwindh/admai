@@ -1,18 +1,18 @@
 <template>
     <div class="m-header">
         <div class="m-header-box">
-            <a href="/">
+            <router-link to="/">
                 <img alt="大麦网" src="../../assets/Main/MainLeft.png" class="i-log">
-            </a>
+            </router-link>
             <div class="location-header" @mouseenter="enter('city-header-wrap')" @mouseleave="leave('city-header-wrap')">
                 <img class="i-icon-location" src="../../assets/Main/position.png" alt="定位">
-                <span class="city-location">{{this.city.name}}</span>
+                <span class="city-location">{{this.$store.state.city.name}}</span>
                 <img class="i-arrow-location" src="../../assets/Main/point.png" alt="箭头">
                 <div class="city-header-wrap">
                     <div class="city-header">
                         <div class="now-city">
                             <span class="title-city">当前城市:</span>
-                            <span class="name-city select-city">{{this.city.name}}</span>
+                            <span class="name-city select-city">{{this.$store.state.city.name}}</span>
                         </div>
                         <div class="hot-city">
                             <span class="title-city">热门城市:</span>
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="recommend-header">
-                <a href="/" class="type-recommend select">首页</a>
+                <router-link to="/" class="type-recommend select">首页</router-link>
                 <a class="type-recommend" @click = "clickFun()">分类</a>
             </div>
             <div class="right-header">
@@ -81,8 +81,9 @@
             </div>
             <div class="search-header">
                 <img class="i-search" src="../../assets/Main/search.png" alt="搜索">
-                <input class="input-search" placeholder="搜索明星、演出、体育赛事">
-                <div class="btn-search">搜索</div>
+                <input class="input-search" :value="this.$route.query.searchItem" placeholder="搜索明星、演出、体育赛事" v-if="this.$route.query.searchItem !== undefined"/>
+                <input class="input-search" placeholder="搜索明星、演出、体育赛事" v-else/>
+                <div class="btn-search" @click="toSearch">搜索</div>
                 <div class="list-search-wrap">
                     <div class="list-search">
                     </div>
@@ -113,7 +114,8 @@
                     {name:'成都'},
                     {name:'中国香港'},
                 ],
-                user:{}
+                user:{},
+                search:'',
             }
         },
         mounted(){
@@ -146,11 +148,9 @@
                 });
             },
             clickFun() {
+                this.$store.commit("changeType",{id:0,name:'全部'});
                 this.$router.push({
                     path: `/Type`,
-                    query:{
-                        city: this.city.name
-                    }
                 })
             },
             clickCity(e) {
@@ -161,13 +161,16 @@
                             return item.id;
                     });
                     this.city.id = res.id;
+                }else {
+                    this.city.id = 0;
                 }
+                this.$store.commit("getCity",this.city);
                 $(".city-location").html(this.city.name);
                 $('.select-city').html(this.city.name);
             },
             exit(){
-                this.$store.commit("getUser",this.user);
                 this.user = {};
+                this.$store.commit("getUser",this.user);
             },
             toLogin(){
                 this.$router.push({
@@ -189,6 +192,16 @@
                     })
                 }
                 this.$store.commit('setPath',val);
+            },
+            toSearch(){
+                this.search = document.getElementsByClassName("input-search")[0].value;
+                this.$store.commit("changeType",{id:0,name:'全部'});
+                this.$router.push({
+                    path: `/Type`,
+                    query:{
+                        searchItem:this.search
+                    }
+                })
             }
         }
     }

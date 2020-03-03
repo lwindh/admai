@@ -5,20 +5,20 @@
                 <div class="hd">
                     <div class="cont">
                         <div class="cover">
-                            <img class="poster" src="" >
+                            <img class="poster" :src="show.cover" >
                         </div>
                         <div class="order">
                             <div class="title">
                                 <span class="tip">总票代</span>
-                                <span>【厦门】My Beautiful Live 杨千嬅世界巡回演唱会-厦门站</span>
+                                <span>【{{show.city.name}}】{{show.title}} {{show.city.name}}站</span>
                             </div>
                             <div class="address">
-                                <div class="time">时间：2020.04.11 周六 19:30</div>
+                                <div class="time">时间：{{new Date(show.times[0].time).toLocaleString()}}</div>
                                 <div class="place">
-                                    <div class="addr">场馆：厦门市 | 厦门体育中心体育场</div>
+                                    <div class="addr">场馆：{{show.city.name}}市 | {{show.location.detail}}</div>
                                 </div>
                             </div>
-                            <div class="perform-notice">
+<!--                            <div class="perform-notice">
                                 <div class="perform-notice-prefix">
                                     <span >预售</span>
                                 </div>
@@ -28,11 +28,11 @@
                                         预售期间，由于主办未正式开票，下单后无法立即为您配票。一般于演出前2-6周开票，待正式开票后，请您通过订单详情页或者票夹详情，查看票品信息、取票方式等演出相关信息
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="citys">
                                 <label>城市</label>
                                 <div class="citylist">
-                                    <div class="cityitem" @click="changeCityStatus('cityitem',item.id)" v-for="item in city" :key="item.name">{{item.name}}</div>
+                                    <div class="cityitem" @click="changeCityStatus('cityitem',index,item.name)" v-for="(item,index) in citys" :key="index">{{item.name}}</div>
                                 </div>
                             </div>
                             <div class="perform__order__box">
@@ -41,10 +41,10 @@
                                 <div class="perform__order__select perform__order__select__performs">
                                     <div class="select_left">场次</div>
                                     <div class="select_right">
-                                        <div class="select_right_list">
-                                            <div class="select_right_list_item active">
-                                                <span class="presell">预售</span>
-                                                <span>2020-04-11 周六 19:30</span>
+                                        <div class="select_right_list" >
+                                            <div class="select_right_list_item times active" @click="changeTimeStatus('times',index)" v-for="(item,index) in time" :key="item.id">
+                                                <!--<span class="presell">预售</span>-->
+                                                <span>{{new Date(item.time).toLocaleString()}}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -53,8 +53,10 @@
                                     <div class="select_left">票档</div>
                                     <div class="select_right">
                                         <div class="select_right_list">
-                                            <div class="select_right_list_item sku_item" v-for="item in page" :key="item.id" @click="changePageStatus('sku_item',item.id)">
-                                                <div class="skuname">{{item.price}}元</div>
+                                            <div class="select_right_list_item sku_item" v-for="(item,index) in tickets" :key="item.id" @click="changePageStatus('sku_item',index)">
+                                                <span class="notticket" v-if="item.count === 0">已售完</span>
+                                                <div class="skuname" v-if='item.description === ""'>{{item.money}}元</div>
+                                                <div class="skuname" v-else>{{item.money}}元({{item.description}})</div>
                                             </div>
                                         </div>
                                     </div>
@@ -87,7 +89,8 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="buybtn">立即预订</div>
+                                    <div class="buybtn" @click="toOrder" v-if="this.$store.state.user.nickName != null">立即预订</div>
+                                    <div class="buybtn" @click="toLogin" v-else>立即预订</div>
                                 </div>
                             </div>
                         </div>
@@ -109,6 +112,10 @@
                                     观演须知
                                     <span class="notice-nav-item-flag" style="display: none;"></span>
                                 </span>
+                                <span class="notice-nav-item" @click="toPosition('notice2',3)">
+                                    评论
+                                    <span class="notice-nav-item-flag" style="display: none;"></span>
+                                </span>
                             </div>
                         </div>
                         <div class="notice-nav">
@@ -124,132 +131,74 @@
                                 观演须知
                                 <span class="notice-nav-item-flag" style="display: none;"></span>
                             </span>
+                            <span class="notice-nav-item" @click="toPosition('notice2',3)">
+                                评论
+                                <span class="notice-nav-item-flag" style="display: none;"></span>
+                            </span>
                         </div>
                         <div class="notice-content">
                             <div class="detail">
                                 <div id="detail" class="list">
                                     <div class="title">演出介绍</div>
                                     <div class="words">
-                                            <div style="clear: both">
-                                                <div style="clear: both;">
-                                                    <span>1月16日10:18预售</span>
-                                                </div>
-                                                <div style="clear: both;"><br></div>
-                                                <div style="clear: both;">
-                                                    2020年杨千嬅全新巡回《My&nbsp;Beautiful&nbsp;Live杨千嬅世界巡回演唱会》，引起各方歌迷热烈回响。这次千嬅带着她的Beautiful&nbsp;Live来到厦门！这是杨千嬅出道24年来在厦门办个唱，喜欢她的歌迷千万不要错过。
-                                                </div>
-                                                <div style="clear: both;">
-                                                    为了这场演唱会，杨千嬅费尽心思，从演唱会制作、由挑选歌曲到舞台设计和造型都参与其中。"不管是粤语歌，还是国语歌，或者是自己演唱的经典影视剧的主题歌，或者是别的歌手的经典曲目。"&nbsp;杨千嬅希望借助这次《My&nbsp;Beautiful&nbsp;Live世界巡回演唱会》透过音乐和自己的歌声,去表达美丽人生拥有的不同阶段，将自己的人生乐章与大家分享。希望为听众带来新一轮的音乐盛宴，相信这场努力准备和充满诚意的演唱会将为歌迷带来连连惊喜！
-                                                </div>
-                                            </div>
+                                            <div style="clear: both" v-html='show.content.replace(/\n/g,"<br>")'></div>
                                     </div>
                                 </div>
                                 <div id="notice0" class="list">
                                     <div class="title">购票须知</div>
-                                    <div class="words"><div>
-                                        <p class="item_title">限购规则</p>
-                                        <ul>
-                                            <li>每笔订单最多购买6张</li>
-                                        </ul>
-                                    </div>
-                                        <div>
-                                            <p class="item_title">退票/换票规则</p>
-                                            <ul>
-                                                <li>票品为有价证券，非普通商品，其背后承载的文化服务具有时效性，稀缺性等特征，不支持退换。</li>
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <p class="item_title">优惠券使用规则</p>
-                                            <ul>
-                                                <li>本项目不支持除大麦网VIP会员优惠券及指定膨胀金以外的其他优惠券购票，敬请理解</li>
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <p class="item_title">入场规则</p>
-                                            <ul>
-                                                <li>须携带纸质门票验票入场。</li>
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <p class="item_title">儿童购票</p>
-                                            <ul>
-                                                <li>1.2米以上凭成人票入场，1.2米以下谢绝入场</li>
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <p class="item_title">发票说明</p>
-                                            <ul>
-                                                <li>演出开始前，去【APP-订单详情页】提交发票申请。演出结束后1个月左右邮寄给你，需自付邮费。</li>
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <p class="item_title">实名购票规则</p>
-                                            <ul>
-                                                <li>一个订单对应一个证件；证件支持：台湾居民来往大陆通行证/护照/身份证/港澳居民来往内地通行证</li>
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <p class="item_title">异常排单说明</p>
-                                            <ul>
-                                                <li>对于异常订购行为，大麦网有权在订单成立或者生效之后取消相应订单。异常订购行为包括但不限于以下情形：
-                                                （1）通过同一ID订购超出限购张数的订单。
-                                                （2）经合理判断认为非真实消费者的下单行为，包括但不限于通过批量相同或虚构的支付账号、收货地址（包括下单时填写及最终实际收货地址）、收件人、电话号码订购超出限购张数的订单。
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                    <div class="words" v-html="show.ticketNotice.replace(/\n/g,'<br>')"></div>
                                 </div>
                                 <div id="notice1" class="list">
                                     <div class="title">观演须知</div>
+                                    <div class="words" v-html="show.viewNotice.replace(/\n/g,'<br>')"></div>
+                                </div>
+                                <div id="notice2" class="list">
+                                    <div class="title">评论</div>
                                     <div class="words">
-                                        <div>
-                                            <p class="item_title">演出时长</p>
-                                            <ul>
-                                                <li>约120分钟（以现场为准）</li>
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <p class="item_title">入场时间</p>
-                                            <ul>
-                                                <li>请于开始前约90分钟入场</li>
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <p class="item_title">最低演出曲目</p>
-                                            <ul>
-                                                <li>约20首</li>
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <p class="item_title">主要演员</p>
-                                            <ul>
-                                                <li>杨千嬅</li>
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <p class="item_title">最低演出时长</p>
-                                            <ul>
-                                                <li>约120分钟</li>
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <p class="item_title">禁止携带物品</p>
-                                            <ul>
-                                                <li>由于安保和版权的原因，大多数演出、展览及比赛场所禁止携带食品、饮料、专业摄录设备、打火机等物品，请您注意现场工作人员和广播的提示，予以配合。</li>
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <p class="item_title">寄存说明</p>
-                                            <ul>
-                                                <li>无寄存处,请自行保管携带物品，谨防贵重物品丢失。</li>
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <p class="item_title">大麦网初始开售时全场可售门票总张数</p>
-                                            <ul>
-                                                <li>25000</li>
-                                            </ul>
-                                        </div>
+                                        <el-row type="flex" class="row-bg" style="margin-top: 10px;" justify="center" v-for="item in comments" :key="item.id">
+                                            <el-col :span="20" >
+                                                <el-card shadow="never">
+                                                    <div class="demo-basic--circle" style="width: 30px;float: left;">
+                                                        <div class="block">
+                                                            <el-avatar size="small" :src="item.user.avatar">{{item.user.nickName}}</el-avatar>
+                                                        </div>
+                                                    </div>
+                                                    <div style="float: left;">
+                                                        <span style="font-size:12px;color: green;fontWeight:bold;">{{item.user.nickName}} - {{new Date(item.createTime).toLocaleString()}}</span>
+                                                        <br>
+                                                        <div style="margin-top: 10px;"></div>
+                                                        <span v-html="item.content.replace(/\n/g,'<br>')"></span>
+                                                    </div>
+                                                </el-card>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row type="flex" class="row-bg" style="margin-top: 10px;">
+                                            <el-col :span="22" >
+                                                <el-pagination
+                                                        @current-change="handleCurrentChange"
+                                                        background
+                                                        layout="prev, pager, next"
+                                                        :page-size="30"
+                                                        style="float: right;"
+                                                        :total="total">
+                                                </el-pagination>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row type="flex" class="row-bg" style="margin-top: 10px;" justify="center" v-if="status === '可以评论'">
+                                            <el-col :span="20" >
+                                                <el-card shadow="never">
+                                                    <div>
+                                                        <div class="form-group">
+                                                            <label>评论内容</label>
+                                                            <el-input type="textarea" :rows="4" v-model="content"></el-input>
+                                                        </div>
+                                                        <div>
+                                                            <el-button style="float: right;" type="success" @click="postComments" plain>发表评论</el-button>
+                                                        </div>
+                                                    </div>
+                                                </el-card>
+                                            </el-col>
+                                        </el-row>
                                     </div>
                                 </div>
                             </div>
@@ -293,42 +242,24 @@
 
 <script>
     import '@/style/Perform.css'
-    import $ from 'jquery'
     export default {
         name: "Detail",
         data(){
             return{
                 num:1,
                 price:380,
-                page:[
-                    {
-                    id:1,
-                    price:280,
-                },
-                    {
-                    id:2,
-                    price:380,
-                },
-                    {
-                    id:3,
-                    price:480,
-                },
-                    {
-                    id:4,
-                    price:580,
-                },
-                    {
-                    id:5,
-                    price:780,
-                },
-                    {
-                    id:6,
-                    price:980,
-                }
-                ],
-                city:[
-                    {id:1,name:'柳州站'},
-                    {id:2,name:'厦门站'}]
+                show:[],
+                tickets:[],
+                time:[],
+                description:'',
+                sTime:'',
+                citys:[],
+                ticketId:'',
+                content:'',
+                nowPage:1,
+                comments:[],
+                total:10,
+                status:'',
             }
         },
         computed:{
@@ -336,37 +267,104 @@
                 return this.num * this.price;
             },
         },
+        async created(){
+            await this.getShow(this.$store.state.id);
+            await this.getCitys(this.show.title);
+            await this.changeCityStatus('cityitem',this.$store.state.id,this.show.city.name);
+            this.getCommentSates();
+        },
         mounted(){
             window.addEventListener('scroll', this.scrollToTop);
-            this.changeCityStatus('cityitem',2);
-            this.changePageStatus('sku_item',2)
+            this.getComments();
         },
         destroyed(){
             window.removeEventListener('scroll', this.scrollToTop);
         },
         methods:{
+            handleCurrentChange(val) {
+                this.nowPage = val;
+                this.getComments();
+            },
+            postComments(){
+                if(this.content !== '') {
+                    let time = new Date().getTime();
+                    this.$axios({
+                        method: 'post',
+                        url: "http://118.31.7.87:8080/comment/add",
+                        data: {
+                            "content": this.content,
+                            "createTime": time,
+                            "performId": this.$store.state.id,
+                            "userId": this.$store.state.user.id
+                        }
+                    }).then(res => {
+                        console.log(res.data);
+                        if (res.data.msg === "新增成功") {
+                            this.$message({
+                                type: 'success',
+                                message: '评论成功!'
+                            });
+                            this.getComments();
+                            this.content = '';
+                        } else {
+                            this.$message.error(res.data.msg);
+                        }
+                    }).catch(err => {
+                        console.log(err);
+                    });
+                }else {
+                    this.$message.error('请输入评论内容');
+                }
+            },
+            getComments(){
+                this.$axios({
+                    method: 'post',
+                    url: "http://118.31.7.87:8080/comment/"+this.$store.state.id+"/"+this.nowPage,
+                }).then(res =>{
+                    console.log(res.data);
+                    if(res.data.msg === '成功'){
+                        this.comments = res.data.data.data;
+                        this.total =parseInt(res.data.data.total);
+                    }else{
+                        this.$message.error(res.data.msg);
+                    }
+                }).catch(err =>{
+                    console.log(err);
+                });
+            },
             toPosition(val,index){
+                this.changeTab(index);
                 let li = document.getElementById(val);
                 li.scrollIntoView();
-                this.changeTab(index);
             },
             changeTab(index){
                 let aList = document.getElementsByClassName('notice-nav-item');
                 let bList = document.getElementsByClassName('notice-nav-item-flag');
                 for(let i = 0;i < aList.length;i++){
-                    if(i === index || i === index+3){
+                    if(i === index || i === index+4){
                         aList[i].className = 'notice-nav-item notice-nav-item-active';
                     }else {
                         aList[i].className = 'notice-nav-item';
                     }
                 }
                 for(let j = 0;j < bList.length;j++){
-                    if(j === index || j === index+3){
+                    if(j === index || j === index+4){
                         bList[j].style.display = '';
                     }else {
                         bList[j].style.display = 'none';
                     }
                 }
+            },
+            getCommentSates(){
+                this.$axios({
+                    method: 'get',
+                    url: "http://118.31.7.87:8080/comment/able?performId="+this.$store.state.id+"&userId="+this.$store.state.user.id,
+                }).then(res =>{
+                    console.log(res.data);
+                    this.status = res.data.msg;
+                }).catch(err =>{
+                    console.log(err);
+                });
             },
             handleChange(value) {
                 console.log(value);
@@ -376,41 +374,122 @@
                 let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
                 that.scrollTop = scrollTop;
 
-                if(that.scrollTop > document.getElementById('detail').offsetTop){
+                if(that.scrollTop > document.getElementById('detail').offsetTop-150){
                     this.changeTab(0);
                     document.getElementsByClassName("notice-nav-fixed")[0].style.display = "block";
                 }else{
                     document.getElementsByClassName("notice-nav-fixed")[0].style.display = "none";
                 }
-                if(that.scrollTop > document.getElementById('notice0').offsetTop){
+                if(that.scrollTop > document.getElementById('notice0').offsetTop-150){
                     this.changeTab(1);
                 }
-                if(that.scrollTop > document.getElementById('notice1').offsetTop){
+                if(that.scrollTop > document.getElementById('notice1').offsetTop-150){
                     this.changeTab(2);
                 }
+                if(that.scrollTop > document.getElementById('notice2').offsetTop-150){
+                    this.changeTab(3);
+                }
             },
-            changeCityStatus(val,index){
-                let list = $('.'+val);
+            changeCityStatus(val,index,key){
+                let list = document.getElementsByClassName(val);
                 for(let j = 0;j < list.length;j++){
-                    if(j === index - 1){
+                    if(list[j].innerHTML === key){
                         list[j].className = val+' active';
                     }else {
                         list[j].className = val;
                     }
                 }
+                this.$store.commit("getId",index);
+                this.getShow(index);
             },
-            changePageStatus(val,index){
-                let list = $('.'+val);
+            changeTimeStatus(val,index){
+                let list = document.getElementsByClassName(val);
+                this.sTime = this.time[index].time;
                 for(let j = 0;j < list.length;j++){
-                    if(j === index - 1){
+                    if(j === index){
                         list[j].className = val+' select_right_list_item active';
                     }else {
                         list[j].className = val+' select_right_list_item';
                     }
                 }
-                this.price = this.page[index-1].price;
-                this.num = 1;
-            }
+            },
+            changePageStatus(val,index){
+                let list = document.getElementsByClassName(val);
+                if(this.show.tickets[index].count !== 0){
+                    for(let j = 0;j < list.length;j++){
+                        if(j === index){
+                            list[j].className = val+' select_right_list_item active';
+                        }else {
+                            list[j].className = val+' select_right_list_item';
+                        }
+                    }
+                    this.price = this.show.tickets[index].money;
+                    this.description = this.tickets[index].description;
+                    this.ticketId = this.tickets[index].id;
+                    this.num = 1;
+                    console.log(this.ticketId);
+                }
+            },
+            async getShow(val){
+                await this.$axios({
+                    method: 'post',
+                    url: "http://118.31.7.87:8080/perform/detail/"+val,
+                }).then(res =>{
+                    console.log(res.data);
+                    if(res.data.msg === '成功'){
+                        this.show = res.data.data;
+                        this.tickets = res.data.data.tickets;
+                        this.time = res.data.data.times;
+                    }else{
+                        this.$message.error(res.data.msg);
+                    }
+                }).catch(err =>{
+                    console.log(err);
+                });
+                this.changeTimeStatus('times',0);
+                for(let i =0;i<this.tickets.length;i++){
+                    if(this.tickets.count !== 0) {
+                        return this.changePageStatus('sku_item', i);
+                    }
+                }
+            },
+            toOrder(){
+                let order={
+                    total:this.sum,
+                    num:this.num,
+                    price:this.price,
+                    desc:this.description,
+                    time:this.sTime,
+                    ticketId:this.ticketId
+                };
+                this.$store.commit("getOrder",order);
+                this.$router.push({
+                    path: `/Order`
+                })
+            },
+            async getCitys(val){
+                await this.$axios({
+                    method: 'post',
+                    url: "http://118.31.7.87:8080/perform/city/"+val,
+                }).then(res =>{
+                    console.log(res.data);
+                    if(res.data.msg === '成功'){
+                        this.citys = res.data.data;
+                    }else{
+                        this.$message.error(res.data.msg);
+                    }
+                }).catch(err =>{
+                    console.log(err);
+                });
+            },
+            toLogin(){
+                this.$router.push({
+                    path: `/Login`,
+                    query:{
+                        path:this.$route.path
+                    }
+                })
+            },
         },
 
     }
