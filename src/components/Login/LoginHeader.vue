@@ -2,15 +2,15 @@
     <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="4">
             <div class="grid-content bg-purple">
-                <a href="/">
+                <router-link to="/">
                     <img alt="大麦网" src="../../assets/LoginLeft.png" class="left">
-                </a>
+                </router-link>
             </div>
         </el-col>
         <el-col :span="1"><div class="grid-content bg-purple-light"></div></el-col>
         <el-col :span="4">
             <div class="grid-content bg-purple">
-                <a href="#" class="btn">English</a>
+                <a class="btn">English</a>
             </div>
         </el-col>
     </el-row>

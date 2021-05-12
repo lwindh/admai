@@ -1,0 +1,70 @@
+.order-pay-wrapper {
+    text-align: right;
+    font-size: 12px;
+    padding: 16px 14px;
+    background: #f7f7f7;
+}
+.order-pay-wrapper .order-pay-top {
+    color: #333;
+    line-height: 16px;
+}
+.order-pay-wrapper .order-pay-top span {
+    font-size: 26px;
+    line-height: 32px;
+    color: #999;
+}
+.order-pay-wrapper .order-pay-top span em {
+    color: #ff1268;
+}
+em, i {
+    font-style: normal;
+}
+.order-pay-wrapper .delivery-wrapper {
+    margin-top: 12px;
+    line-height: 18px;
+    font-size: 12px;
+}
+.order-pay-wrapper {
+    text-align: right;
+    font-size: 12px;
+    padding: 16px 14px;
+    background: #f7f7f7;
+}
+.order-pay-wrapper .delivery-wrapper>div>span {
+    color: #333;
+    margin-right: 10px;
+}
+.order-pay-wrapper .delivery-wrapper>div>span {
+    color: #333;
+    margin-right: 10px;
+}
+.dm-pay-type-item-wrapper.selected {
+    border: 2px solid #ff1268;
+    cursor: pointer;
+}
+.dm-pay-type-item-wrapper {
+    box-sizing: border-box;
+    float: left;
+    width: 245px;
+    height: 80px;
+    border: 1px solid #e4e4e4;
+    border-radius: 2px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+img, input {
+    vertical-align: middle;
+}
+.dm-pay-type-item-wrapper.selected:after {
+    content: '';
+    background: url(../assets/selectde.png) no-repeat;
+    width: 15px;
+    height: 14px;
+    background-size: 15px;
+    position: absolute;
+    bottom: 0;
+    right: -1px;
+}

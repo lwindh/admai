@@ -14,9 +14,9 @@
         data(){
             return{
                 img_list:[
-                    require("../../assets/Main/01.png"),
-                    require("../../assets/Main/02.png"),
-                    require("../../assets/Main/03.png")
+                    require("@/assets/Main/01.png"),
+                    require("@/assets/Main/02.png"),
+                    require("@/assets/Main/03.png")
                 ]
             }
         }

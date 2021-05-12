@@ -7,8 +7,8 @@
                     <el-row type="flex" class="row-bg" justify="center">
                         <el-col :span="8"><div class="grid-content bg-purple">
                             <el-form status-icon label-width="100px" :model="form" :rules="rules" ref="form" class="demo-ruleForm from" >
-                                <el-form-item label="用户名" prop="username">
-                                    <el-input v-model="form.username"></el-input>
+                                <el-form-item label="手机号" prop="username">
+                                    <el-input @change="checkPhone" v-model="form.username"></el-input>
                                 </el-form-item>
                                 <el-form-item label="输入密码" prop="password">
                                     <el-tooltip class="item" effect="dark" content="6-20个字符" placement="right">
@@ -22,7 +22,7 @@
                                     <CheckedImg @patch="getStatus"/>
                                 </el-form-item>
                                 <el-form-item prop="check">
-                                    <el-checkbox @change="checkedChange" v-model="checked" name="zc" autocomplete="off">我已阅读并同意 <a href="https://sale.damai.cn/contents/4677/13574.html">《会员协议》</a>和
+                                    <el-checkbox @change="checkedChange" checked v-model="checked" name="zc" autocomplete="off">我已阅读并同意 <a href="https://sale.damai.cn/contents/4677/13574.html">《会员协议》</a>和
                                         <a href="https://sale.damai.cn/contents/4677/13572.html">《隐私权条款》</a></el-checkbox>
                                 </el-form-item>
                                 <el-form-item>
@@ -40,6 +40,7 @@
 <script>
     import LoginHeader from "@/components/Login/LoginHeader";
     import CheckedImg from "@/components/Register/CheckedImg";
+    import '@/style/Order.css'
     export default {
         name: "Registered",
         components:{
@@ -83,6 +84,16 @@
                     callback();
                 }
             };
+            let validatePhone = (rule, value, callback) => {
+                var reg=/^1[3456789]\d{9}$/;
+                if (!reg.test(value)) {
+                    callback(new Error('手机号格式错误'));
+                } else if(this.status){
+                    callback(new Error('手机号已被注册'));
+                } else{
+                    callback();
+                }
+            };
             return {
                 form: {
                     username:'',
@@ -92,10 +103,12 @@
                     check:0,
                     check1:0
                 },
-                checked: false,
+                status:false,
+                checked: true,
                 rules: {
                     username:[
-                        {required: true, message: '请输入用户名', trigger: 'blur'}
+                        { required: true, message: '请输入手机号', trigger: 'blur'},
+                        { validator: validatePhone, trigger: 'blur'}
                     ],
                     password: [
                         { validator: validatePass, required: true, trigger: 'blur' }
@@ -119,18 +132,64 @@
             },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
-                    if (valid && this.$store.state.status) {
-                        alert('submit!');
+                    if (valid && this.check1 !== 0) {
+                        this.$axios({
+                            method:"post",
+                            url:"http://118.31.7.87:8080/user/register",
+                            headers:{
+                            'Content-Type': 'application/json'
+                            },
+                            data:{
+                                "password": this.form.password,
+                                "phoneNumber": this.form.username
+                            }
+                        }).then(res =>{
+                            if(res.data.msg === "注册成功"){
+                                this.$axios.post("http://118.31.7.87:8080/user/login",
+                                    {
+                                        account: this.form.username,
+                                        password: this.form.password
+                                    }
+                                ).then(res1 =>{
+                                    // console.log(res);
+                                    if(res1.data.msg === '成功'){
+                                        this.$store.commit('getUser',res1.data.data);
+                                        this.$router.push({
+                                            path: `/`
+                                        })
+                                    }
+                                }).catch(err =>{
+                                    console.log(err);
+                                });
+                            }else{
+                                this.$message.error('注册失败!');
+                            }
+                        }).catch(err =>{
+                            console.log(err);
+                        });
                     } else {
                         console.log('error submit!!');
                         return false;
                     }
                 });
+                //
             },
             checkedChange(){
                 this.form.check = this.checked ? 1:0;
+            },
+            checkPhone(){
+                this.$axios.get("http://118.31.7.87:8080/user/register/phone?phoneNumber="+this.form.username
+                ).then(res =>{
+                    if(res.data.msg === '手机号未注册'){
+                        this.status = false;
+                    }else{
+                        this.status = true;
+                    }
+                    this.$refs['form'].validateField('username')
+                }).catch(err =>{
+                    console.log(err);
+                });
             }
-
         }
     }
 </script>
